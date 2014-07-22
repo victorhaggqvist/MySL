@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginLeft="10dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="subtitle"
+            android:id="@+id/card_number"
+            android:textColor="@android:color/darker_gray"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reduced Price"
+            android:id="@+id/card_passenger_type"
+            android:textColor="@android:color/black"
+            android:layout_marginLeft="10dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <!-- if card has purse -->
+    <TextView
+        android:id="@+id/card_purse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reskassa: 100kr, 3 kuponger"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/card_type"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2016-05-03, 00:00"
+        android:id="@+id/card_expire"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/card_price"
+        android:textColor="@android:color/black"/>
+</LinearLayout>

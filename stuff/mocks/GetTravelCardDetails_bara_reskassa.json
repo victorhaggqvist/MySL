@@ -1,0 +1,38 @@
+{  
+  "ms":343,
+  "status":"success",
+  "data":{  
+    "travel_card":{  
+      "href":"travel_card/60821",
+      "rdesc":"1786536499",
+      "created_at":"2010-08-20T20:04:37+00:00",
+      "created_by":"private_customer/156840",
+      "serial_number":"1786536499",
+      "name":"RedOne",
+      "blocked":false,
+      "replaced_by_serial_number":null,
+      "replaced_serial_number":null,
+      "detail":{  
+        "card_status":"ISSUED",
+        "blocked":false,
+        "card_serial_number":"1786536499",
+        "expire_date":"2016-05-02T22:00:00+00:00",
+        "purse_value":100.0,
+        "purse_blocked":false,
+        "purse_valid":true,
+        "purse_autoload":false,
+        "passenger_type":"Reducerat pris",
+        "coupon_count":"3",
+        "replaced_by_serial_number":null,
+        "replaced_serial_number":null,
+        "purse_value_ext":"100,00"
+      },
+      "replaced_date":null,
+      "blocked_date":null,
+      "owner":{  
+        "ref":"private_customer/156840",
+        "description":"Victor Häggqvist (156840)"
+      }
+    }
+  }
+}

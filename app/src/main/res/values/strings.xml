@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">My SL</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Login</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="login">Login</string>
+    <string name="login_or">or</string>
+    <string name="create_account">Create Account</string>
+    <string name="error_login_credentials">Login failed, are you sure about those credentials?</string>
+    <string name="pref_user_username">user_username</string>
+    <string name="pref_user_password">user_password</string>
+    <string name="error_connectivity">Could not connect to sl.se</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pref_user_fullname">user_fullname</string>
+    <string name="pref_user_firstname">user_firstname</string>
+    <string name="pref_user_lastname">user_lastname</string>
+    <string name="pref_user_email">user_email</string>
+    <string name="file_userinfo">userinfo</string>
+    <string name="title_section_mycards">My Cards</string>
+    <string name="reduced_price">Reduced Price</string>
+    <string name="list_card_purse" formatted="false">SL Access Credit: %dkr, %d Coupons</string>
+    <string name="title_section_onlineorders">Online Orders</string>
+    <string name="signout">Sign Out</string>
+    <string name="pref_refresh_on_start">refresh_on_start</string>
+    <string name="pref_title_refresh_on_start">Refresh on start</string>
+    <string name="pref_description_refresh_on_start">Refresh info when app starts</string>
+
+</resources>
