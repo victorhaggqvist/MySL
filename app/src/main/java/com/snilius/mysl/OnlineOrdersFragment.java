@@ -7,7 +7,15 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 
+import com.snilius.mysl.model.OrderItemChild;
+import com.snilius.mysl.model.OrderItemHeader;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -21,31 +29,27 @@ import android.view.ViewGroup;
  */
 public class OnlineOrdersFragment extends Fragment {
 
-    private static final String ARG_USERNAME = "CardList.Username";
-    private static final String ARG_PASSWORD = "CardList.Password";
+//    private static final String ARG_USERNAME = "CardList.Username";
+//    private static final String ARG_PASSWORD = "CardList.Password";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+//    private String mParam1;
+//    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
     private String mUsername, mPassword;
+    private ExpandableListView listView;
+    private OrderListAdapter listAdapter;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param username Parameter 1.
-     * @param password Parameter 2.
      * @return A new instance of fragment OnlineOrdersFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static OnlineOrdersFragment newInstance(String username, String password) {
+    public static OnlineOrdersFragment newInstance() {
         OnlineOrdersFragment fragment = new OnlineOrdersFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_USERNAME, username);
-        args.putString(ARG_PASSWORD, password);
-        fragment.setArguments(args);
         return fragment;
     }
     public OnlineOrdersFragment() {
@@ -55,17 +59,62 @@ public class OnlineOrdersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mUsername = getArguments().getString(ARG_USERNAME);
-            mPassword = getArguments().getString(ARG_PASSWORD);
-        }
+//        if (getArguments() != null) {
+//            mUsername = getArguments().getString(ARG_USERNAME);
+//            mPassword = getArguments().getString(ARG_PASSWORD);
+//        }
+
+        GlobalState gs = (GlobalState) getActivity().getApplication();
+        mUsername = gs.getUsername();
+        mPassword = gs.getPassword();
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_online_orders, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_online_orders, container, false);
+        listView = (ExpandableListView) rootView.findViewById(R.id.order_list);
+        setup();
+        return rootView;
+    }
+
+    private void setup() {
+        ArrayList<OrderItemHeader> headers = new ArrayList<OrderItemHeader>();
+        HashMap<OrderItemHeader, List<OrderItemChild>> children = new HashMap<OrderItemHeader, List<OrderItemChild>>();
+
+        headers.add(new OrderItemHeader(45, "23", "23"));
+        headers.add(new OrderItemHeader(45, "23", "23"));
+        headers.add(new OrderItemHeader(45, "23", "23"));
+        headers.add(new OrderItemHeader(45, "23", "23"));
+        
+        ArrayList<OrderItemChild> children1 = new ArrayList<OrderItemChild>();
+        children1.add(new OrderItemChild(1, "222", "56"));
+        children1.add(new OrderItemChild(1, "222", "56"));
+        children1.add(new OrderItemChild(1, "222", "56"));
+
+        ArrayList<OrderItemChild> children2 = new ArrayList<OrderItemChild>();
+        children2.add(new OrderItemChild(1, "222", "56"));
+        children2.add(new OrderItemChild(1, "222", "56"));
+        children2.add(new OrderItemChild(1, "222", "56"));
+
+        ArrayList<OrderItemChild> children3 = new ArrayList<OrderItemChild>();
+        children3.add(new OrderItemChild(1, "222", "56"));
+        children3.add(new OrderItemChild(1, "222", "56"));
+        children3.add(new OrderItemChild(1, "222", "56"));
+
+        ArrayList<OrderItemChild> children4 = new ArrayList<OrderItemChild>();
+        children4.add(new OrderItemChild(1, "222", "56"));
+        children4.add(new OrderItemChild(1, "222", "56"));
+        children4.add(new OrderItemChild(1, "222", "56"));
+
+        children.put(headers.get(0), children1);
+        children.put(headers.get(1), children2);
+        children.put(headers.get(2), children3);
+        children.put(headers.get(3), children4);
+
+        listAdapter = new OrderListAdapter(getActivity(), headers, children);
+        listView.setAdapter(listAdapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

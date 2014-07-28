@@ -1,0 +1,24 @@
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.snilius.mysl.CardActivity"
+    android:id="@+id/card_detail_ptr"
+    android:background="#eee">
+
+    <!--<TextView-->
+        <!--android:id="@+id/card_detail_name"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Yolo - 1234567890"-->
+        <!--android:textStyle="bold"-->
+        <!--android:visibility="gone"/>-->
+
+    <it.gmariotti.cardslib.library.view.CardListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/card_detail_list"
+
+        android:paddingTop="12dp"/>
+
+</android.support.v4.widget.SwipeRefreshLayout>

@@ -33,7 +33,7 @@ public class SLApiProvider{
         // workaround since ion just merges all cookies which results in duplicates
         // start every session clean
         new CookieMiddleware(context,"ion").clear();
-        Ion.getDefault(context).configure().setLogging("MyLogs", Log.DEBUG);
+//        Ion.getDefault(context).configure().setLogging("MyLogs", Log.DEBUG);
     }
 
     public void authenticate(Context context, FutureCallback<Response<JsonObject>> callback, String username, String password){
@@ -78,6 +78,18 @@ public class SLApiProvider{
                 .setHeader("Accept", "application/json, text/plain, */*")
                 .setHeader("Pragma", "no-cache")
                 .setJsonObjectBody(requestBody)
+                .asJsonObject()
+                .withResponse()
+                .setCallback(callback);
+    }
+
+    public void getSalesOrders(Context context, FutureCallback<Response<JsonObject>> callback){
+        Ion.with(context)
+                .load(MYSL_ENDPOINT + "/GetSalesOrders")
+                .setHeader("User-Agent", USER_AGENT)
+                .setHeader("Referer", "https://sl.se/sv/mitt-sl/konto/")
+                .setHeader("Accept", "application/json, text/plain, */*")
+                .setHeader("Pragma", "no-cache")
                 .asJsonObject()
                 .withResponse()
                 .setCallback(callback);

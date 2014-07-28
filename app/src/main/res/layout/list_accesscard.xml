@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginLeft="10dp">
+    android:layout_marginLeft="10dp"
+    android:layout_marginBottom="10dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -41,21 +42,31 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/card_type"
-        android:textColor="@android:color/black"/>
+        android:text="Månadskort"
+        android:id="@+id/card_period_type"
+        android:textColor="@android:color/black"
+        android:visibility="gone"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2016-05-03, 00:00"
-        android:id="@+id/card_expire"
-        android:textColor="@android:color/black"/>
+        android:id="@+id/card_period_expire"
+        android:textColor="@android:color/black"
+        android:visibility="gone"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/card_price"
-        android:textColor="@android:color/black"/>
+        android:text="700kr"
+        android:id="@+id/card_period_price"
+        android:textColor="@android:color/black"
+        android:visibility="gone"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/card_empty"
+        android:text="@string/card_empty"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="18sp"/>
 </LinearLayout>

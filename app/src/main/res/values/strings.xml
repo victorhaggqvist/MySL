@@ -25,14 +25,21 @@
     <string name="pref_user_firstname">user_firstname</string>
     <string name="pref_user_lastname">user_lastname</string>
     <string name="pref_user_email">user_email</string>
-    <string name="file_userinfo">userinfo</string>
+    <string name="file_shoppingcart">userinfo</string>
     <string name="title_section_mycards">My Cards</string>
     <string name="reduced_price">Reduced Price</string>
-    <string name="list_card_purse" formatted="false">SL Access Credit: %dkr, %d Coupons</string>
+    <!--<string name="list_card_purse" formatted="false">SL Access Credit: %skr, %d Coupons</string>-->
+    <string name="list_card_purse" formatted="false">SL Access Credit: %skr</string>
     <string name="title_section_onlineorders">Online Orders</string>
     <string name="signout">Sign Out</string>
     <string name="pref_refresh_on_start">refresh_on_start</string>
     <string name="pref_title_refresh_on_start">Refresh on start</string>
     <string name="pref_description_refresh_on_start">Refresh info when app starts</string>
+    <string name="full_price">Full price</string>
+    <string name="title_activity_card">CardActivity</string>
+    <string name="sl_access_credit">SL Access Credit</string>
+    <string name="card_empty">Card is empty</string>
+    <string name="card_detail_purse_value" fomatted="false">Credit: %skr</string>
+    <string name="card_detail_purse_default_ride">Standard Ride: %d coupons</string>
 
 </resources>

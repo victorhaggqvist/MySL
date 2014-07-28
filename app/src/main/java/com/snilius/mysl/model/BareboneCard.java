@@ -1,7 +1,11 @@
 package com.snilius.mysl.model;
 
+import android.app.Activity;
+import android.content.Context;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.snilius.mysl.R;
 
 /**
  * Created by victor on 7/21/14.
@@ -96,11 +100,50 @@ public class BareboneCard {
         return passengerType;
     }
 
+    public int getPassengerTypeStringId(){
+        if (passengerType.equals("Helt pris"))
+            return R.string.full_price;
+        else if (passengerType.equals("Reducerat pris"))
+            return R.string.reduced_price;
+        else
+            return -1;
+    }
+
     public String getExpires() {
         return expires;
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getDetailStoreFileName(){
+        return id.split("/")[1];
+    }
+
+    @Override
+    public String toString() {
+        return "BareboneCard{" +
+                "productCount=" + productCount +
+                ", travelPurseCount=" + travelPurseCount +
+                ", canAddProduct=" + canAddProduct +
+                ", canAddTravelPurse=" + canAddTravelPurse +
+                ", info='" + info + '\'' +
+                ", serial='" + serial + '\'' +
+                ", isNew=" + isNew +
+                ", isBlocked=" + isBlocked +
+                ", purseValue=" + purseValue +
+                ", purseValueFull=" + purseValueFull +
+                ", purseEnabled=" + purseEnabled +
+                ", couponCount=" + couponCount +
+                ", passengerType='" + passengerType + '\'' +
+                ", expires='" + expires + '\'' +
+                ", blocked=" + blocked +
+                ", productObject=" + productObject +
+                ", id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", priceIncVat=" + priceIncVat +
+                ", description=" + description +
+                '}';
     }
 }

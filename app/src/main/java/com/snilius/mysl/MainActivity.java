@@ -3,38 +3,23 @@ package com.snilius.mysl;
 import android.app.Activity;
 
 import android.app.ActionBar;
-import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.snilius.mysl.util.Helper;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashMap;
 
 
 public class MainActivity extends Activity
@@ -89,34 +74,39 @@ public class MainActivity extends Activity
 
     private void loadUserInfoFile() {
         InputStream inputStream;
-        String userinfoFile="";
-
+        String userinfoFile= null;
         try {
-            FileInputStream fis = openFileInput(getString(R.string.file_userinfo));
-            inputStream = new BufferedInputStream(fis);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line = reader.readLine();
-            while (line != null){
-                userinfoFile +=line;
-                line = reader.readLine();
-            }
-
-            reader.close();
-            inputStream.close();
-        } catch (FileNotFoundException e) {
-            // user not logged in yet
-            e.printStackTrace();
+            userinfoFile = Helper.openFile(this, getString(R.string.file_shoppingcart));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+//        try {
+//            FileInputStream fis = openFileInput(getString(R.string.file_userinfo));
+//            inputStream = new BufferedInputStream(fis);
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+//
+//            String line = reader.readLine();
+//            while (line != null){
+//                userinfoFile +=line;
+//                line = reader.readLine();
+//            }
+//
+//            reader.close();
+//            inputStream.close();
+//        } catch (FileNotFoundException e) {
+//            // user not logged in yet
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         if (userinfoFile.length()>0) {
             Log.i(TAG, "Userinfo file loaded");
 
             try {
                 JsonObject userInfo = new JsonParser().parse(userinfoFile).getAsJsonObject();
-                ((GlobalState) getApplication()).setUserInfo(userInfo);
+                ((GlobalState) getApplication()).setmShoppingCart(userInfo);
             } catch (JsonSyntaxException e) {
                 System.out.println("User info file has broken json");
 //            e.printStackTrace();
@@ -130,6 +120,8 @@ public class MainActivity extends Activity
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         username = preferences.getString(getString(R.string.pref_user_username), "");
         password = preferences.getString(getString(R.string.pref_user_password), "");
+        ((GlobalState) getApplication()).setUserinfo(username, password);
+        boolean refresh = preferences.getBoolean(getString(R.string.pref_refresh_on_start),true);
 
         FragmentManager fragmentManager = getFragmentManager();
         if (password.length()<1)
@@ -137,12 +129,12 @@ public class MainActivity extends Activity
         switch (position) {
             case 0:
                 fragmentManager.beginTransaction()
-                    .replace(R.id.container, CardListFragment.newInstance(username, password))
+                    .replace(R.id.container, CardListFragment.newInstance(username, password, refresh))
                     .commit();
                 break;
             case 1:
                 fragmentManager.beginTransaction()
-                    .replace(R.id.container, OnlineOrdersFragment.newInstance(username, password))
+                    .replace(R.id.container, OnlineOrdersFragment.newInstance())
                     .commit();
                 break;
             case 3:
@@ -152,7 +144,7 @@ public class MainActivity extends Activity
     }
 
     private void signOutUser() {
-        deleteFile(getString(R.string.file_userinfo));
+        deleteFile(getString(R.string.file_shoppingcart));
         PreferenceManager.getDefaultSharedPreferences(this).edit().clear().commit();
         Log.i(TAG, "User signout, everything cleanup");
         startActivityForResult(new Intent(this, LoginActivity.class), LoginActivity.REQUEST_CODE);
@@ -182,8 +174,9 @@ public class MainActivity extends Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == LoginActivity.REQUEST_CODE){
-            Toast.makeText(this,"Login done", Toast.LENGTH_SHORT).show();
-            onNavigationDrawerItemSelected(0);
+//            Toast.makeText(this,"Login done", Toast.LENGTH_SHORT).show();
+            mNavigationDrawerFragment.selectItem(0);
+//            onNavigationDrawerItemSelected(0);
         }
 //        super.onActivityResult(requestCode, resultCode, data);
     }

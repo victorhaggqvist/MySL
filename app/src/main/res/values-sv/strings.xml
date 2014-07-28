@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="reduced_price">Reduced Price</string>
-    <string name="title_section_onlineorders">Online Orders</string>
-    <string name="pref_title_refresh_on_start">Refresh on start</string>
-    <string name="pref_description_refresh_on_start">Refresh info when app starts</string>
+    <string name="reduced_price">Reducerat pris</string>
+    <string name="title_section_onlineorders">Online ordrar</string>
+    <string name="pref_title_refresh_on_start">Upddatera info vid start</string>
+    <string name="pref_description_refresh_on_start">Uppdatera info när appen startar</string>
+    <string name="full_price">Fullt pris</string>
+    <string name="sl_access_credit">Reskassa</string>
+    <string name="card_empty">Kortet är tomt</string>
+    <string name="card_detail_purse_value">Saldo: %skr</string>
+    <string name="card_detail_purse_default_ride">Standard resa: %i kuponger</string>
 
 </resources>
