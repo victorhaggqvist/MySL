@@ -57,8 +57,9 @@ public class OrderListAdapter extends BaseExpandableListAdapter {
         TextView desctiption = (TextView) convertView.findViewById(R.id.order_list_child_desctiption);
         TextView price = (TextView) convertView.findViewById(R.id.order_list_child_price);
 
-        desctiption.setText("yolo");
-        price.setText("miao");
+//        desctiption.setText(String.format(mContext.getString(R.string.order_list_productline), child.getQuantity(), child.getDescription()));
+        desctiption.setText(child.getDescription());
+        price.setText(child.getTotalPriceIncVat());
         return convertView;
     }
 
@@ -97,9 +98,9 @@ public class OrderListAdapter extends BaseExpandableListAdapter {
         TextView date = (TextView) convertView.findViewById(R.id.order_list_head_date);
         TextView price = (TextView) convertView.findViewById(R.id.order_list_head_price);
 
-        number.setText("123");
-        date.setText("zvxzv");
-        price.setText("qwe");
+        number.setText(Integer.toString(header.getOrderNumber()));
+        date.setText(header.getDate());
+        price.setText(header.getAmountIncVat());
 
         return convertView;
     }

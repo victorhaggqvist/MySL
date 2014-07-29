@@ -41,5 +41,7 @@
     <string name="card_empty">Card is empty</string>
     <string name="card_detail_purse_value" fomatted="false">Credit: %skr</string>
     <string name="card_detail_purse_default_ride">Standard Ride: %d coupons</string>
+    <string name="file_orders">orders</string>
+    <!--<string name="order_list_productline" fomatted="false">%sx %s</string>-->
 
 </resources>

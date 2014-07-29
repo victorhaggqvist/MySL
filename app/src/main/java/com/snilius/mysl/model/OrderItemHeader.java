@@ -13,6 +13,12 @@ public class OrderItemHeader {
 
     private String mAmountIncVat;
 
+    /**
+     * Create a Order item
+     * @param mOrderNumber  The rdesc of the order
+     * @param mDate         The date
+     * @param mAmountIncVat The total price
+     */
     public OrderItemHeader(int mOrderNumber, String mDate, String mAmountIncVat) {
         this.mOrderNumber = mOrderNumber;
         this.mDate = mDate;

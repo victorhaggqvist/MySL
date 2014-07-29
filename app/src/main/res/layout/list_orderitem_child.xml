@@ -2,13 +2,19 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="1st Pony card"
-        android:id="@+id/order_list_child_desctiption" />
+        android:id="@+id/order_list_child_desctiption"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="18sp"/>
 
     <TextView
         android:layout_width="fill_parent"
