@@ -121,7 +121,9 @@ public class MainActivity extends Activity
         username = preferences.getString(getString(R.string.pref_user_username), "");
         password = preferences.getString(getString(R.string.pref_user_password), "");
         ((GlobalState) getApplication()).setUserinfo(username, password);
+
         boolean refresh = preferences.getBoolean(getString(R.string.pref_refresh_on_start),true);
+        ((GlobalState) getApplication()).setRefresh(refresh);
 
         FragmentManager fragmentManager = getFragmentManager();
         if (password.length()<1)
@@ -145,6 +147,7 @@ public class MainActivity extends Activity
 
     private void signOutUser() {
         deleteFile(getString(R.string.file_shoppingcart));
+        deleteFile(getString(R.string.file_orders));
         PreferenceManager.getDefaultSharedPreferences(this).edit().clear().commit();
         Log.i(TAG, "User signout, everything cleanup");
         startActivityForResult(new Intent(this, LoginActivity.class), LoginActivity.REQUEST_CODE);
@@ -206,45 +209,4 @@ public class MainActivity extends Activity
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//            return rootView;
-//        }
-//
-//        @Override
-//        public void onAttach(Activity activity) {
-//            super.onAttach(activity);
-//            ((MainActivity) activity).onSectionAttached(
-//                    getArguments().getInt(ARG_SECTION_NUMBER));
-//        }
-//    }
-
 }
