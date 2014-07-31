@@ -15,6 +15,10 @@ public class GlobalState extends Application{
 
     private String mUsername, mPassword;
 
+    private boolean refresh;
+    private boolean addCardDialogOpen;
+    private String addCardDialogMsg;
+
     public GlobalState() { }
 
     public JsonObject getmShoppingCart() {
@@ -36,5 +40,29 @@ public class GlobalState extends Application{
 
     public String getPassword() {
         return mPassword;
+    }
+
+    public boolean isRefresh() {
+        return refresh;
+    }
+
+    public void setRefresh(boolean refresh) {
+        this.refresh = refresh;
+    }
+
+    public boolean isAddCardDialogOpen() {
+        return addCardDialogOpen;
+    }
+
+    public void setAddCardDialogOpen(boolean addCardDialogOpen) {
+        this.addCardDialogOpen = addCardDialogOpen;
+    }
+
+    public String getAddCardDialogMsg() {
+        return addCardDialogMsg;
+    }
+
+    public void setAddCardDialogMsg(String addCardDialogMsg) {
+        this.addCardDialogMsg = addCardDialogMsg;
     }
 }

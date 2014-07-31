@@ -3,9 +3,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
+    android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
     android:paddingTop="7dp"
-    android:paddingBottom="7dp">
+    android:paddingBottom="7dp"
+    android:paddingRight="16dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -38,7 +39,6 @@
         android:text="New Text"
         android:id="@+id/order_list_head_price"
         android:gravity="right"
-        android:paddingRight="16dp"
         android:paddingTop="2dp"
         android:textSize="14sp"/>
 </LinearLayout>

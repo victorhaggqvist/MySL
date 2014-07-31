@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft"
+    android:paddingRight="16dp">
 
     <TextView
         android:layout_width="wrap_content"

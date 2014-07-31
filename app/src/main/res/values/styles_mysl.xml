@@ -29,7 +29,7 @@
         <item name="android:actionModeBackground">@drawable/cab_background_top_mysl</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_mysl</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Mysl</item>
-        
+        <!--<item name="android:selectableItemBackground">@string/abctionbarBackground</item>-->
         
     </style>
 
@@ -77,4 +77,5 @@
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Mysl</item>
     </style>
 
+    <!--<string name="abctionbarBackground">#4ab3da</string>-->
 </resources>

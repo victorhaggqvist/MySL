@@ -10,11 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
 import com.snilius.mysl.model.OrderItemChild;
 import com.snilius.mysl.model.OrderItemHeader;
@@ -24,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 
 /**
@@ -112,8 +115,7 @@ public class OnlineOrdersFragment extends Fragment implements SwipeRefreshLayout
 
         if (mRefresh)
             doRefresh();
-
-        if (Helper.isFileExsist(getActivity(), getString(R.string.file_orders))) {
+        else if (Helper.isFileExsist(getActivity(), getString(R.string.file_orders))) {
             try {
                 String ordersFile = Helper.openFile(getActivity(), getString(R.string.file_orders));
                 orderData = new JsonParser().parse(ordersFile).getAsJsonObject();
@@ -210,11 +212,25 @@ public class OnlineOrdersFragment extends Fragment implements SwipeRefreshLayout
         public void onFragmentInteraction(Uri uri);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (null != sl)
+            sl.killRequests();
+    }
+
     private class LoginCallback implements FutureCallback<Response<JsonObject>> {
 
         @Override
         public void onCompleted(Exception e, Response<JsonObject> result) {
-            if (result.getHeaders().getResponseCode() == 200){
+            if (null == result) {
+                if (e instanceof TimeoutException) {
+                    Log.i(TAG, "Login, Connection Timeout");
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getActivity(), getString(R.string.error_connectivity), Toast.LENGTH_LONG).show();
+                }else
+                    Log.i(TAG, "Login Canceled");
+            }else if (result.getHeaders().getResponseCode() == 200){
                 Log.d(TAG, "Login successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
                 mAuthenticated = true;
                 sl.getSalesOrders(getActivity(), new SalesOrdersCallback());
@@ -229,7 +245,9 @@ public class OnlineOrdersFragment extends Fragment implements SwipeRefreshLayout
     private class SalesOrdersCallback implements FutureCallback<Response<JsonObject>> {
         @Override
         public void onCompleted(Exception e, Response<JsonObject> result) {
-            if (result.getHeaders().getResponseCode() == 200){
+            if (null == result)
+                Log.i(TAG, "SalesOrders Canceled");
+            else if (result.getHeaders().getResponseCode() == 200){
                 Log.d(TAG, "Sales load successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
                 orderData = result.getResult().getAsJsonObject("data");
                 try {

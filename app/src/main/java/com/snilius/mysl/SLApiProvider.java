@@ -14,6 +14,7 @@ import com.koushikdutta.ion.cookie.CookieMiddleware;
 import org.apache.http.NameValuePair;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -27,16 +28,23 @@ public class SLApiProvider{
     public static final String USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36\n";
 
     private static SLApiProvider mSlApiProvider;
+    private Object requestGroup;
     private long sessionStart;
+    private Context mContext;
 
     public SLApiProvider(Context context) {
+        mContext = context;
+        requestGroup = new Object();
         // workaround since ion just merges all cookies which results in duplicates
         // start every session clean
-        new CookieMiddleware(context,"ion").clear();
+
 //        Ion.getDefault(context).configure().setLogging("MyLogs", Log.DEBUG);
     }
 
     public void authenticate(Context context, FutureCallback<Response<JsonObject>> callback, String username, String password){
+//        System.out.println("coookiess "+new CookieMiddleware(context,"ion").getCookieStore().getCookies());
+        new CookieMiddleware(context,"ion").clear();
+//        System.out.println("coookiess "+new CookieMiddleware(context,"ion").getCookieStore().getCookies());
         sessionStart = System.currentTimeMillis();
         JsonObject json = new JsonObject();
         json.addProperty("username", username);
@@ -47,6 +55,7 @@ public class SLApiProvider{
                 .setHeader("User-Agent", USER_AGENT)
                 .setHeader("Referer", "https://sl.se/sv/mitt-sl/inloggning/")
                 .setJsonObjectBody(json)
+                .group(requestGroup)
                 .asJsonObject()
                 .withResponse()
                 .setCallback(callback);
@@ -63,6 +72,7 @@ public class SLApiProvider{
                 .setHeader("Accept-Encoding", "gzip,deflate,sdch")
                 .setHeader("Accept-Language", "en-US,en;q=0.8,sv;q=0.6")
                 .setHeader("Pragma", "no-cache")
+                .group(requestGroup)
                 .asJsonObject()
                 .withResponse()
                 .setCallback(callback);
@@ -78,20 +88,57 @@ public class SLApiProvider{
                 .setHeader("Accept", "application/json, text/plain, */*")
                 .setHeader("Pragma", "no-cache")
                 .setJsonObjectBody(requestBody)
+                .group(requestGroup)
                 .asJsonObject()
                 .withResponse()
                 .setCallback(callback);
     }
 
     public void getSalesOrders(Context context, FutureCallback<Response<JsonObject>> callback){
+//        System.out.println("coookiess "+new CookieMiddleware(context,"ion").getCookieStore().getCookies());
         Ion.with(context)
                 .load(MYSL_ENDPOINT + "/GetSalesOrders")
                 .setHeader("User-Agent", USER_AGENT)
                 .setHeader("Referer", "https://sl.se/sv/mitt-sl/konto/")
                 .setHeader("Accept", "application/json, text/plain, */*")
                 .setHeader("Pragma", "no-cache")
+                .group(requestGroup)
                 .asJsonObject()
                 .withResponse()
                 .setCallback(callback);
+    }
+
+    public void createAccount(Context context, FutureCallback<Response<JsonObject>> callback, JsonObject postBody){
+        Ion.with(context)
+                .load(MYSL_ENDPOINT + "/CreateAccount")
+                .setHeader("User-Agent", USER_AGENT)
+                .setHeader("Referer", "https://sl.se/sv/mitt-sl/inloggning//")
+                .setHeader("Accept", "application/json, text/plain, */*")
+                .setHeader("Pragma", "no-cache")
+                .setHeader("Content-Type", "application/json;charset=utf-8")
+                .setJsonObjectBody(postBody)
+                .group(requestGroup)
+                .asJsonObject()
+                .withResponse()
+                .setCallback(callback);
+    }
+
+    public void  registerTravelCard(Context context, FutureCallback<Response<JsonObject>> callback, JsonObject postBody){
+        Ion.with(context)
+                .load(MYSL_ENDPOINT + "/RegisterTravelCard")
+                .setHeader("User-Agent", USER_AGENT)
+                .setHeader("Referer", "https://sl.se/sv/mitt-sl/inloggning//")
+                .setHeader("Accept", "application/json, text/plain, */*")
+                .setHeader("Pragma", "no-cache")
+                .setHeader("Content-Type", "application/json;charset=utf-8")
+                .setJsonObjectBody(postBody)
+                .group(requestGroup)
+                .asJsonObject()
+                .withResponse()
+                .setCallback(callback);
+    }
+
+    public void killRequests(){
+        Ion.getDefault(mContext).cancelAll(requestGroup);
     }
 }

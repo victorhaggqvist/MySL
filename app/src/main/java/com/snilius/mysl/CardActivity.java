@@ -54,7 +54,10 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
         System.out.println("serial "+mSerial);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.card_detail_ptr);
-        mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_dark, android.R.color.holo_blue_light, android.R.color.holo_blue_dark, android.R.color.holo_blue_light);
+        mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_dark,
+                android.R.color.holo_blue_light,
+                android.R.color.holo_blue_dark,
+                android.R.color.holo_blue_light);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
 //        mNameHeader = (TextView) findViewById(R.id.card_detail_name);

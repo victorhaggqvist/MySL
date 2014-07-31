@@ -25,10 +25,22 @@ public class Helper {
     }
 
     public static Boolean isFileExsist(Context context, String fileName) {
-        File file = context.getFileStreamPath(fileName);
+        File file = null;
+        try {
+            file = context.getFileStreamPath(fileName);
+        } catch (Exception e) {
+            return false;
+        }
         return file.exists();
     }
 
+    /**
+     * Open a file
+     * @param context
+     * @param fileName
+     * @return
+     * @throws IOException
+     */
     public static String openFile(Context context, String fileName) throws IOException {
         String file = "";
 

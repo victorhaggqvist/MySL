@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.koushikdutta.ion.Ion;
 import com.snilius.mysl.util.Helper;
 
 import java.io.IOException;
@@ -39,8 +40,6 @@ public class MainActivity extends Activity
 
     private String username, password;
     private SharedPreferences preferences;
-
-//    public static final String TRANSFER_KEY = "com.snilius.mysl.TRANSFER_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +68,6 @@ public class MainActivity extends Activity
             Log.d(TAG, "Regular start flow");
             loadUserInfoFile();
         }
-
     }
 
     private void loadUserInfoFile() {
@@ -80,26 +78,6 @@ public class MainActivity extends Activity
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        try {
-//            FileInputStream fis = openFileInput(getString(R.string.file_userinfo));
-//            inputStream = new BufferedInputStream(fis);
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-//
-//            String line = reader.readLine();
-//            while (line != null){
-//                userinfoFile +=line;
-//                line = reader.readLine();
-//            }
-//
-//            reader.close();
-//            inputStream.close();
-//        } catch (FileNotFoundException e) {
-//            // user not logged in yet
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         if (userinfoFile.length()>0) {
             Log.i(TAG, "Userinfo file loaded");
@@ -131,7 +109,7 @@ public class MainActivity extends Activity
         switch (position) {
             case 0:
                 fragmentManager.beginTransaction()
-                    .replace(R.id.container, CardListFragment.newInstance(username, password, refresh))
+                    .replace(R.id.container, CardListFragment.newInstance())
                     .commit();
                 break;
             case 1:
@@ -139,7 +117,7 @@ public class MainActivity extends Activity
                     .replace(R.id.container, OnlineOrdersFragment.newInstance())
                     .commit();
                 break;
-            case 3:
+            case 2:
                 signOutUser();
                 break;
         }

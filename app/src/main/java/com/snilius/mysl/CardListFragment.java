@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -27,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
+import java.util.concurrent.TimeoutException;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
@@ -79,13 +83,9 @@ public class CardListFragment extends Fragment {
      * @param username
      * @param password
      */
-    public static CardListFragment newInstance(String username, String password, boolean doRefresh) {
+    public static CardListFragment newInstance() {
         CardListFragment fragment = new CardListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_USERNAME, username);
-        args.putString(ARG_PASSWORD, password);
-        args.putBoolean(ARG_DOREFRESH, doRefresh);
-        fragment.setArguments(args);
+        fragment.setRetainInstance(true);
         return fragment;
     }
 
@@ -96,17 +96,19 @@ public class CardListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mUsername = getArguments().getString(ARG_USERNAME);
-            mPassword = getArguments().getString(ARG_PASSWORD);
-            mDoRefresh = getArguments().getBoolean(ARG_DOREFRESH);
-        }
+        setHasOptionsMenu(true);
+
+        GlobalState gs = (GlobalState) getActivity().getApplication();
+        mUsername = gs.getUsername();
+        mPassword = gs.getPassword();
+        mDoRefresh = gs.isRefresh();
+
         gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         JsonArray travelCardsList;
         GlobalState app = ((GlobalState) getActivity().getApplication());
         if (app.getmShoppingCart() != null) {
             travelCardsList = app.getmShoppingCart().getAsJsonArray("TravelCards");
-            System.out.println(travelCardsList);
+//            System.out.println(travelCardsList);
             bareboneCards = gson.fromJson(travelCardsList, new TypeToken<ArrayList<BareboneCard>>(){}.getType());
         }
         cards = new ArrayList<Card>();
@@ -160,6 +162,8 @@ public class CardListFragment extends Fragment {
     }
 
     private void processCardQueue() {
+        if (null == bareboneCards)
+            return;
         while (cardsFetched < bareboneCards.size()){
             GetTravelCardDetailsCallback item = cardDetailsFetchQueue.poll();
             boolean dataFetched = false;
@@ -167,6 +171,7 @@ public class CardListFragment extends Fragment {
                 String file = "";
                 try {
                     file = Helper.openFile(getActivity(), item.getFileName());
+                    dataFetched = true;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -176,7 +181,7 @@ public class CardListFragment extends Fragment {
                     applyCardDetail(item.getListCard(), json);
                 }
             }else {
-                sl.getTravelCardDetails(getActivity(), item, item.getCardId());
+                sl.getTravelCardDetails(getActivity().getApplicationContext(), item, item.getCardId());
                 dataFetched = true;
             }
 
@@ -185,6 +190,7 @@ public class CardListFragment extends Fragment {
             }
             cardsFetched++;
         }
+        Log.i(TAG, "Cards loaded");
     }
 
     private void applyCardDetail(AccessCard listCard, JsonObject data) {
@@ -246,6 +252,13 @@ public class CardListFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (null != sl)
+            sl.killRequests();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -261,11 +274,35 @@ public class CardListFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.card, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_show_add_card:
+                startActivity(new Intent(getActivity(), AddCardActivity.class));
+                break;
+        }
+        return true;
+//        return super.onOptionsItemSelected(item);
+    }
+
     private class LoginCallback implements FutureCallback<Response<JsonObject>> {
 
         @Override
         public void onCompleted(Exception e, Response<JsonObject> result) {
-            if (result.getHeaders().getResponseCode() == 200){
+            if (null == result) {
+                if (e instanceof TimeoutException) {
+                    Log.i(TAG, "Login, Connection Timeout");
+//                    mSwipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getActivity(), getString(R.string.error_connectivity), Toast.LENGTH_LONG).show();
+                }else
+                    Log.i(TAG, "Login Canceled");
+            }else if (result.getHeaders().getResponseCode() == 200){
                 Log.d(TAG, "Login successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
                 authenticated = true;
                 processCardQueue();
@@ -294,7 +331,7 @@ public class CardListFragment extends Fragment {
         @Override
         public void onCompleted(Exception e, Response<JsonObject> result) {
             if (result.getHeaders().getResponseCode() == 200){
-                System.out.println(result.getResult());
+//                System.out.println(result.getResult());
                 JsonObject data = result.getResult().getAsJsonObject("data");
                 try {
                     Helper.saveToFile(getActivity(), getFileName(), data.toString());
