@@ -1,0 +1,7 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.snilius.mysl.CreateAccountActivity" >
+    <item android:id="@+id/action_create_account"
+        android:title="@string/create_account"
+        android:showAsAction="always" />
+</menu>
