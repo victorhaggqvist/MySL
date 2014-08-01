@@ -138,6 +138,10 @@ public class CardListFragment extends Fragment {
                 card.setOnClickListener(new Card.OnCardClickListener() {
                     @Override
                     public void onClick(Card card, View view) {
+                        if(((AccessCard) card).isCardEmpty()) {
+                            Toast.makeText(getActivity(), getString(R.string.card_empty), Toast.LENGTH_LONG).show();
+                            return;
+                        }
                         Intent i = new Intent(getActivity(), CardActivity.class);
                         i.putExtra(EXTRA_CARD_SERIAL, bbc.getSerial());
                         startActivity(i);
