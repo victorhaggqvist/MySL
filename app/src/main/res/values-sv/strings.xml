@@ -41,5 +41,7 @@
     <string name="add_card">Add Card</string>
     <string name="card_registered_success">Card registered successfully</string>
     <string name="fill_in_all">Fill in all the things</string>
+    <string name="ssn_note">För att du ska kunna registrera ditt SL Access-kort och få tillgång till förlustgarantin behöver SL ditt personnummer och du måste ha en folkbokföringsadress.  För att kunna skapa ett konto med personnummer måste du ha fyllt 16 år.</string>
+    <string name="start_note">Detta är en inofficiell app för Mitt SL.</string>
 
 </resources>

@@ -72,5 +72,7 @@
     <string name="add_card">Add Card</string>
     <string name="card_registered_success">Card registered successfully</string>
     <string name="fill_in_all">Fill in all the things</string>
+    <string name="ssn_note">To be able to register your SL Access card and get access to loss guarantee SL needs your social security number and you must have a registered address in Sweden. In order to create an account with social security number you must be over 16 years old.</string>
+    <string name="start_note">This is a unofficial app to use with your My SL account.</string>
 
 </resources>
