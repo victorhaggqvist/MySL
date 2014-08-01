@@ -72,6 +72,7 @@ public class OnlineOrdersFragment extends Fragment implements SwipeRefreshLayout
         OnlineOrdersFragment fragment = new OnlineOrdersFragment();
         return fragment;
     }
+
     public OnlineOrdersFragment() {
         // Required empty public constructor
     }
@@ -108,14 +109,17 @@ public class OnlineOrdersFragment extends Fragment implements SwipeRefreshLayout
         setup();
     }
 
+    /**
+     * Initial fragment setup
+     * Fetch order list from either disk or from SL
+     */
     private void setup() {
         sl = new SLApiProvider(getActivity());
         headers = new ArrayList<OrderItemHeader>();
         children = new HashMap<OrderItemHeader, List<OrderItemChild>>();
 
-        if (mRefresh)
-            doRefresh();
-        else if (Helper.isFileExsist(getActivity(), getString(R.string.file_orders))) {
+        boolean initWasRefresh = false;
+        if (Helper.isFileExsist(getActivity(), getString(R.string.file_orders))) {
             try {
                 String ordersFile = Helper.openFile(getActivity(), getString(R.string.file_orders));
                 orderData = new JsonParser().parse(ordersFile).getAsJsonObject();
@@ -124,15 +128,26 @@ public class OnlineOrdersFragment extends Fragment implements SwipeRefreshLayout
                 Log.i(TAG, "No orders file present");
                 doRefresh();
             }
-        }else
+        }else {
+            doRefresh();
+            initWasRefresh = true;
+        }
+
+        if (mRefresh && !initWasRefresh)
             doRefresh();
     }
 
+    /**
+     * Initiate a data refresh, or initial load for that matter
+     */
     private void doRefresh() {
         mSwipeRefreshLayout.setRefreshing(true);
         sl.authenticate(getActivity(), new LoginCallback(), mUsername, mPassword);
     }
 
+    /**
+     * Complete the setup, when data has come from wharever place
+     */
     private void completeSetup() {
         headers.clear();
         children.clear();
@@ -233,7 +248,8 @@ public class OnlineOrdersFragment extends Fragment implements SwipeRefreshLayout
             }else if (result.getHeaders().getResponseCode() == 200){
                 Log.d(TAG, "Login successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
                 mAuthenticated = true;
-                sl.getSalesOrders(getActivity(), new SalesOrdersCallback());
+                if (null != getActivity())
+                    sl.getSalesOrders(getActivity(), new SalesOrdersCallback());
             }else {
 //                System.out.println(result.getResult());
 //                Toast.makeText(getActivity(), "failed to refresh", Toast.LENGTH_LONG).show();
