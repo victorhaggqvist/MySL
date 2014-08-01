@@ -51,9 +51,9 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
  */
 public class CardListFragment extends Fragment {
 
-    private static final String ARG_USERNAME = "CardList.Username";
-    private static final String ARG_PASSWORD = "CardList.Password";
-    private static final String ARG_DOREFRESH = "CardList.doRefresh";
+//    private static final String ARG_USERNAME = "CardList.Username";
+//    private static final String ARG_PASSWORD = "CardList.Password";
+//    private static final String ARG_DOREFRESH = "CardList.doRefresh";
 
     public static final String EXTRA_CARD_SERIAL = "CardActivity.CardSerial";
 
@@ -80,8 +80,6 @@ public class CardListFragment extends Fragment {
      * this fragment.
      *
      * @return A new instance of fragment CardListFragment.
-     * @param username
-     * @param password
      */
     public static CardListFragment newInstance() {
         CardListFragment fragment = new CardListFragment();
@@ -108,13 +106,35 @@ public class CardListFragment extends Fragment {
         GlobalState app = ((GlobalState) getActivity().getApplication());
         if (app.getmShoppingCart() != null) {
             travelCardsList = app.getmShoppingCart().getAsJsonArray("TravelCards");
-//            System.out.println(travelCardsList);
             bareboneCards = gson.fromJson(travelCardsList, new TypeToken<ArrayList<BareboneCard>>(){}.getType());
         }
         cards = new ArrayList<Card>();
-//        setupCards();
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_card_list, container, false);
+        pullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_cardlist);
+        ActionBarPullToRefresh.from(getActivity())
+                .allChildrenArePullable()
+                .listener(new OnRefreshListener() {
+                    @Override
+                    public void onRefreshStarted(View view) {
+                        Toast.makeText(getActivity(), "refreshed", Toast.LENGTH_SHORT).show();
+                        pullToRefreshLayout.setRefreshComplete();
+                    }
+                }).setup(pullToRefreshLayout);
+        cardListView = (CardListView) rootView.findViewById(R.id.cardlist);
+        cardAdapter = new CardArrayAdapter(getActivity(), cards);
+
+        cardListView.setAdapter(cardAdapter);
+        return rootView;
+    }
+
+    /**
+     * Initial fragment setup
+     */
     private void setupCards() {
         if (mDoRefresh) {
             sl = new SLApiProvider(getActivity());
@@ -155,16 +175,12 @@ public class CardListFragment extends Fragment {
 
         if (!mDoRefresh)
             processCardQueue();
-
-//        cardAdapter.setCardListView(cardListView);
-//        for (int i = 0; i < 15; i++) {
-//            Card card = new Card(getActivity());
-//            card.setTitle("card "+i);
-//            cards.add(card);
-//        }
-//        cardAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Process the queue of details reqests
+     * To be called when login is done
+     */
     private void processCardQueue() {
         if (null == bareboneCards)
             return;
@@ -185,44 +201,31 @@ public class CardListFragment extends Fragment {
                     applyCardDetail(item.getListCard(), json);
                 }
             }else {
-                sl.getTravelCardDetails(getActivity().getApplicationContext(), item, item.getCardId());
+                if (null != getActivity())
+                    sl.getTravelCardDetails(getActivity(), item, item.getCardId());
                 dataFetched = true;
             }
 
             if (mDoRefresh && !dataFetched) {
-                sl.getTravelCardDetails(getActivity(), item, item.getCardId());
+                if (null != getActivity())
+                    sl.getTravelCardDetails(getActivity(), item, item.getCardId());
             }
             cardsFetched++;
         }
         Log.i(TAG, "Cards loaded");
     }
 
+    /**
+     * Apply detailed info from data on listCard
+     * TODO to be extended for period tickets
+     * @param listCard
+     * @param data
+     */
     private void applyCardDetail(AccessCard listCard, JsonObject data) {
         JsonObject travelCard = data.getAsJsonObject("travel_card");
         String purseValueExt = travelCard.getAsJsonObject("detail").get("purse_value_ext").getAsString();
         listCard.setPurseValue(purseValueExt);
         cardAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_card_list, container, false);
-        pullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.ptr_cardlist);
-        ActionBarPullToRefresh.from(getActivity())
-                .allChildrenArePullable()
-                .listener(new OnRefreshListener() {
-                    @Override
-                    public void onRefreshStarted(View view) {
-                        Toast.makeText(getActivity(), "refreshed", Toast.LENGTH_SHORT).show();
-                        pullToRefreshLayout.setRefreshComplete();
-                    }
-                }).setup(pullToRefreshLayout);
-        cardListView = (CardListView) rootView.findViewById(R.id.cardlist);
-        cardAdapter = new CardArrayAdapter(getActivity(), cards);
-
-        cardListView.setAdapter(cardAdapter);
-        return rootView;
     }
 
     @Override
@@ -280,7 +283,7 @@ public class CardListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.card, menu);
+        inflater.inflate(R.menu.card_list, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
