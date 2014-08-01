@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -16,6 +14,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Response;
+import com.snilius.mysl.model.AccessCard;
 import com.snilius.mysl.model.BareboneCard;
 import com.snilius.mysl.model.DetailCard;
 import com.snilius.mysl.util.DetailCardHelper;
@@ -43,6 +44,7 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
     private BareboneCard card;
     private JsonObject cardDetail;
     private ArrayList<Card> mCards;
+    private SLApiProvider sl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,6 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
 
         Intent intent = getIntent();
         mSerial = intent.getStringExtra(CardListFragment.EXTRA_CARD_SERIAL);
-        System.out.println("serial "+mSerial);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.card_detail_ptr);
         mSwipeRefreshLayout.setColorScheme(android.R.color.holo_blue_dark,
@@ -64,7 +65,6 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
         mCardList = (CardListView) findViewById(R.id.card_detail_list);
 
         setup();
-        setupCards();
     }
 
     private void setup() {
@@ -89,22 +89,34 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
 
         setTitle(card.getName());
 
-        String detailFile = null;
-        try {
-            detailFile = Helper.openFile(this, card.getDetailStoreFileName());
-        } catch (IOException e) {
-            Log.i(TAG, "Detail file "+ card.getDetailStoreFileName()+" not found");
-        }
+        if (Helper.isFileExsist(this, card.getDetailStoreFileName())){
+            String detailFile = null;
+            try {
+                detailFile = Helper.openFile(this, card.getDetailStoreFileName());
+            } catch (IOException e) {
+                Log.i(TAG, "Detail file "+ card.getDetailStoreFileName()+" not found");
+                refreshData();
+            }
 
-        if (null != detailFile) {
-            cardDetail = new JsonParser().parse(detailFile).getAsJsonObject();
+            if (null != detailFile) {
+                cardDetail = new JsonParser().parse(detailFile).getAsJsonObject();
+            }
+            setupUICards();
+        }else {
+            refreshData();
         }
+    }
+
+    private void refreshData() {
+        if (null == sl)
+            sl = new SLApiProvider(this);
+        sl.getTravelCardDetails(this, new GetTravelCardDetailsCallback(), card.getId());
+    }
+
+    private void setupUICards(){
         mCards = new ArrayList<Card>();
         mCardArrayAdapter = new CardArrayAdapter(this, mCards);
         mCardList.setAdapter(mCardArrayAdapter);
-    }
-
-    private void setupCards(){
         if (card.isPurseEnabled()){
             String passengerType = card.getPassengerTypeStringId() != -1?getString(card.getPassengerTypeStringId())+"\n":"";
             String purseValue = String.format(
@@ -118,38 +130,35 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
 
             mCards.add(purseCard);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.card, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        Log.i(TAG, "UI cards laid out");
     }
 
     @Override
     public void onRefresh() {
-        System.out.println("refresh");
-//        Toast.makeText(this, "foundCard", Toast.LENGTH_SHORT).show();
         mSwipeRefreshLayout.setRefreshing(true);
+        refreshData();
+    }
 
-        ( new Handler()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
+    private class GetTravelCardDetailsCallback implements FutureCallback<Response<JsonObject>> {
+
+        @Override
+        public void onCompleted(Exception e, Response<JsonObject> result) {
+            if (result.getHeaders().getResponseCode() == 200){
+                Log.d(TAG, "GetTravelCardDetails successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                JsonObject data = result.getResult().getAsJsonObject("data");
+                try {
+                    Helper.saveToFile(getApplicationContext(), card.getDetailStoreFileName(), data.toString());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                cardDetail = data;
+                setupUICards();
+                Log.i(TAG, "Card details refreshed for card: " + card.getId());
                 mSwipeRefreshLayout.setRefreshing(false);
+            }else{
+                Log.w(TAG, "Failed to get details for card: " + card.getId());
             }
-        }, 3000);
+
+        }
     }
 }
