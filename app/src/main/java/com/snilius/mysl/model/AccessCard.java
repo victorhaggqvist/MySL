@@ -156,6 +156,10 @@ public class AccessCard extends Card {
         setTVtext(passengerType, mPassengerType);
     }
 
+    public boolean isCardEmpty(){
+        return cardEmptyMsg.getVisibility()==View.VISIBLE;
+    }
+
     @Override
     public String toString() {
         return "AccessCard{" +

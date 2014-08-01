@@ -71,7 +71,6 @@ public class MainActivity extends Activity
     }
 
     private void loadUserInfoFile() {
-        InputStream inputStream;
         String userinfoFile= null;
         try {
             userinfoFile = Helper.openFile(this, getString(R.string.file_shoppingcart));
@@ -155,7 +154,6 @@ public class MainActivity extends Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == LoginActivity.REQUEST_CODE){
-//            Toast.makeText(this,"Login done", Toast.LENGTH_SHORT).show();
             mNavigationDrawerFragment.selectItem(0);
 //            onNavigationDrawerItemSelected(0);
         }
