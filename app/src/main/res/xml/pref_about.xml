@@ -1,0 +1,19 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="about_legal"
+        android:title="@string/pref_title_about"/>
+
+    <Preference
+        android:key="about_contact"
+        android:title="Email" />
+
+    <Preference
+        android:key="about_rate"
+        android:title="@string/rate" />
+
+    <Preference
+        android:key="about_version"
+        android:title="Version" />
+
+</PreferenceScreen>

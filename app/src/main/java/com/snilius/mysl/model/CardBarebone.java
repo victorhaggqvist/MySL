@@ -10,7 +10,7 @@ import com.snilius.mysl.R;
 /**
  * Created by victor on 7/21/14.
  */
-public class BareboneCard {
+public class CardBarebone {
     @SerializedName("ProductCount")
     @Expose
     private int productCount;
