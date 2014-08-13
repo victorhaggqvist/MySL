@@ -29,3 +29,10 @@ proguard/
 
 # Log Files
 *.log
+
+crashlytics.properties
+crashlytics-build.properties
+release.properties
+LoginDefinitions.java
+
+mocks/

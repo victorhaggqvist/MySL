@@ -1,0 +1,4 @@
+keyStore /path/to/keystore
+keyStorePassword=apassword
+keyAlias=publishkey
+keyAliasPassword=apassword

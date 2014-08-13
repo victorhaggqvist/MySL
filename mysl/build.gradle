@@ -65,11 +65,11 @@ def propFile = new File('release.properties')
 if (propFile.canRead()){
     props.load(new FileInputStream(propFile))
 
-    android.signingConfigs.release.storeFile rootProject.file(props.keyStore)
+    android.signingConfigs.release.storeFile file(props.keyStore)
     android.signingConfigs.release.storePassword props.keyStorePassword
     android.signingConfigs.release.keyAlias props.keyAlias
     android.signingConfigs.release.keyPassword props.keyAliasPassword
 } else {
-    println 'signing.properties not found'
+    println 'release.properties not found'
     android.buildTypes.release.signingConfig = null
 }
