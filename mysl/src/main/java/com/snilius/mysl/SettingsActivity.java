@@ -246,7 +246,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals("pref_lang")){
+        if (key.equals("lang")){
             ((GlobalState) getApplication()).reloadLocaleForApplication();
             Toast.makeText(this,"Restart the app for full effect", Toast.LENGTH_LONG).show();
         }
