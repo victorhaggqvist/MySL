@@ -30,8 +30,10 @@ proguard/
 # Log Files
 *.log
 
+#crashlytics
 crashlytics.properties
 crashlytics-build.properties
+
 release.properties
 LoginDefinitions.java
 
