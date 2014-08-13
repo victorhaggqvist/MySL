@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -90,6 +92,9 @@ public class OnlineOrdersFragment extends Fragment implements SwipeRefreshLayout
         mPassword = gs.getPassword();
         mRefresh = gs.isRefresh();
         mAuthenticated = false;
+        Tracker t = ((GlobalState) getActivity().getApplication()).getTracker();
+        t.setScreenName("OrderListView");
+        t.send(new HitBuilders.AppViewBuilder().build());
     }
 
     @Override

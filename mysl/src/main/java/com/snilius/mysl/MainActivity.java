@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
@@ -70,6 +72,10 @@ public class MainActivity extends Activity
             Log.d(TAG, "Regular start flow");
             loadUserInfoFile();
         }
+
+        Tracker t = ((GlobalState) getApplication()).getTracker();
+        t.setScreenName("MainView");
+        t.send(new HitBuilders.AppViewBuilder().build());
     }
 
     private void loadUserInfoFile() {

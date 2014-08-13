@@ -17,6 +17,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Response;
@@ -148,6 +150,10 @@ public class CreateAccountActivity extends Activity {
         });
 
         terms = (CheckBox) findViewById(R.id.create_agreeterms);
+
+        Tracker t = ((GlobalState) getApplication()).getTracker();
+        t.setScreenName("CreateAccountView");
+        t.send(new HitBuilders.AppViewBuilder().build());
     }
 
     private void validText(TextView textView, String msg) {

@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -93,6 +95,10 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
         mDoRefresh = gs.isRefresh();
 
         gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+
+        Tracker t = ((GlobalState) getActivity().getApplication()).getTracker();
+        t.setScreenName("CardListView");
+        t.send(new HitBuilders.AppViewBuilder().build());
     }
 
     @Override

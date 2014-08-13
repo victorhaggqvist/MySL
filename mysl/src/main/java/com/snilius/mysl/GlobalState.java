@@ -8,6 +8,9 @@ import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Logger;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.JsonObject;
 
 import java.util.Locale;
@@ -18,6 +21,8 @@ import java.util.Locale;
 public class GlobalState extends Application{
 
     public static final String TAG = "GSMySL";
+    public static String ANALYTICS_PROPERY_KEY = "UA-53767510-1";
+    public static String APP_VERSION = BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")";
 
     private JsonObject mShoppingCart;
 
@@ -104,5 +109,18 @@ public class GlobalState extends Application{
 
     public void setAddCardDialogMsg(String addCardDialogMsg) {
         this.addCardDialogMsg = addCardDialogMsg;
+    }
+
+    /**
+     * Get analytics tracker.
+     * @return A Tracker
+     */
+    public synchronized Tracker getTracker() {
+        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+        analytics.setDryRun(BuildConfig.DEBUG);
+        if (BuildConfig.DEBUG) {
+            analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
+        }
+        return analytics.newTracker(ANALYTICS_PROPERY_KEY);
     }
 }

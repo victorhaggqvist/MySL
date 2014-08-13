@@ -25,6 +25,9 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+
 import java.util.List;
 
 /**
@@ -52,6 +55,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+        Tracker t = ((GlobalState) getApplication()).getTracker();
+        t.setScreenName("SettingsView");
+        t.send(new HitBuilders.AppViewBuilder().build());
     }
 
     /**

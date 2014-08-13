@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -90,6 +92,9 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
         mCardIdHash = new ArrayList<Integer>();
         gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         setup();
+        Tracker t = ((GlobalState) getApplication()).getTracker();
+        t.setScreenName("CardView");
+        t.send(new HitBuilders.AppViewBuilder().build());
     }
 
     private void setup() {
