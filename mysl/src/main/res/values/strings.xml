@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">My SL</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_add_card">Add Card</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_card">CardActivity</string>
+    <string name="title_activity_create_account">Create Account</string>
+    <string name="title_section_mycards">My Cards</string>
+    <string name="title_section_onlineorders">Online Orders</string>
+    <string name="title_section_signout">Sign Out</string>
+
+    <!-- <string name="title_section1">Section 1</string> -->
+    <!-- <string name="title_section2">Section 2</string> -->
+    <!-- <string name="title_section3">Section 3</string> -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- <string name="hello_world">Hello world!</string> -->
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="login">Login</string>
+    <string name="login_or">or</string>
+    <string name="create_account">Create Account</string>
+    <string name="error_login_credentials">Login failed, are you sure about those credentials?</string>
+    <string name="error_connectivity">Could not connect to sl.se</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="file_shoppingcart">userinfo</string>
+    <string name="reduced_price">Reduced Price</string>
+    <!-- <string name="list_card_purse" formatted="false">SL Access Credit: %skr, %d Coupons</string> -->
+    <string name="list_card_purse_subtitle" formatted="false">%s, %s coupons</string>
+    <string name="full_price">Full price</string>
+    <string name="sl_access_credit">SL Access Credit</string>
+    <string name="card_empty">Card is empty</string>
+    <string name="card_detail_purse_value" fomatted="false">Credit: %skr</string>
+    <string name="card_detail_purse_default_ride" fomatted="false">Standard Ride: %d coupons</string>
+    <string name="file_orders">orders</string>
+    <!-- <string name="order_list_productline" fomatted="false"> %sst %s </string> -->
+
+    <string name="create_username">Username</string>
+    <string name="create_fname">First Name</string>
+    <string name="create_lname">Last Name</string>
+    <string name="create_email">E-mail</string>
+    <string name="create_pw1">Password</string>
+    <string name="create_pw2">Password repeat</string>
+    <string name="create_personnummer">Social Security Number</string>
+    <string name="terms">Syftet med Mitt SL är att SL ska kunna erbjuda personligt anpassade tjänster och produkter samt att skapa en individuell kommunikation med varje kund som registrerar sig. En förutsättning för att få tillgång till de tjänster som erbjuds genom Mitt SL är att du accepterar dessa villkor och samtycker till att SL behandlar dina personuppgifter.\n\n1. Samtycke\nGenom att samtycka accepterar du uttryckligen att SL får behandla dina personuppgifter på det sätt som beskrivs nedan.\n\nSL har rätt och möjlighet att kontrollera och via offentliga register komplettera de uppgifter du lämnar. Du måste dock försäkra dig om att de uppgifter som du tillhandahåller alltid är riktiga och fullständiga. Du ska uppdatera ditt Mitt SL konto så fort du får möjlighet om uppgifterna skulle ändras.\n\n2. Användning av personuppgifter\nSL erbjuder personligt anpassade tjänster som kräver behandling av personuppgifter för att kunna utföras. Exempel på sådana tjänster är SL Access förlustgaranti, personanpassning av reseplanerare, realtidsinformation, information om trafikavvikelser och e-handel (”Tjänster”).\n\nSL behandlar de personuppgifter som du lämnar, såsom namn, personnummer, adress, telefonnummer och e-postadress för administration och realisering av berörda Tjänster, för kommunikation med dig samt för att kunna fullfölja våra åtaganden gentemot dig som kund. Personuppgifterna utgör vidare underlag för marknads- och kundanalyser, affärsuppföljning, affärs- och metodutveckling samt riskhantering. Personuppgifterna kan även komma att användas för direktmarknadsföring och erbjudanden från SL.\n\nDina personuppgifter behandlas under den tid du har ett aktivt konto på Mitt SL och för en tid därefter så att vi kan uppfylla våra åtaganden till dig.\n\nVid registrering av ditt SL Access-kort på Mitt SL behandlar SL personuppgifter såsom datum, klockslag och hållplats/spärr för påstigning (”Resehistorik”) för att kunna utföra kontroller när du gör gällande förlustgaranti, gör reklamationer eller framför andra klagomål till SL. Uppgifterna behandlas även för att du hos SL Center, SL:s kundtjänst och på Mitt SL ska kunna få information om saldo och tidigare transaktioner som påverkar värdet eller omfattningen av en biljett. Endast köptransaktioner kommer att vara tillgängliga på detta sätt.\n\nResehistorik hänförlig till SL Access lagras i högst 60 dagar varefter uppgifterna avidentifieras. Därefter kan uppgifterna inte hänföras till någon viss person.\n\n3. Säkerhet kring personuppgifter\nSL ansvarar för att behandlingen av de personuppgifter som du lämnar i samband med registreringen av ett Mitt SL konto följer Personuppgiftslagen (1998:204).\n\nSL upprätthåller tekniska och organisatoriska säkerhetsåtgärder för att skydda dina personuppgifter. SL lämnar inte ut några uppgifter om dig till tredje part, förutom i de fall det behövs för att kunna fullgöra vårt åtagande till dig.\n\n4. Information om registrerade personuppgifter\nDu har rätt att en gång per kalenderår kostnadsfritt få ut information om vilka personuppgifter som vi behandlar avseende dig. En sådan ansökan ska göras skriftligen till SL på den adress som anges nedan. Du har också rätt att begära rättelse av de personuppgifter som vi behandlar om dig och att när som helst avböja direktmarknadsföring. Vidare kan du när som helst själv ändra eller ta bort uppgifter för ditt konto på Mitt SL.\n\nHar du frågor om dina personuppgifter vänder du dig till vårt personuppgiftsombud på nedan angiven adress eller på telefonnummer 08-686 1600.\n\nAB Storstockholms Lokaltrafik\nPersonuppgiftsombud\n105 73 Stockholm\n\nOm du inte längre vill ha tillgång till de Tjänster du erbjuds via Mitt SL kan du enkelt avregistrera dig från kontot genom att kontakta vår kundtjänst.\n\n5. Missbruk\nSL förbehåller sig rätten att vid missbruk av kontot eller berörda Tjänster avstänga person från vidare användning av Mitt SL.\n\n6. Giltighet och ändring\nDessa villkor är giltiga från och med 2010-03-01. Om innehållet i villkoren förändras meddelar SL dig detta via e-post. Aktuella villkor publiceras alltid på vår webbplats.</string>
+    <string name="create_ssn_hint">YYYYMMDD-NNNN</string>
+    <string name="create_terms">I have read and accept the account teams</string>
+    <string name="create_show_terms">View terms</string>
+    <string name="create_err_username">Don\'t forget username!</string>
+    <string name="create_err_fname">Don\'t forget firstname!</string>
+    <string name="create_err_lname">Don\'t forget lastname!</string>
+    <string name="create_err_email">Don\'t forget email!</string>
+    <string name="create_err_invalid_email">Invalid email-address</string>
+    <string name="create_err_pw">Don\'t forget password!</string>
+    <string name="create_err_pw_nomatch">Passwords don\'t match</string>
+    <string name="create_err_ssn">Don\'t forget it!</string>
+    <string name="create_err_invalid_ssn">Invalid ssn</string>
+    <string name="add_card">Add Card</string>
+    <string name="card_registered_success">Card registered successfully</string>
+    <string name="fill_in_all">Fill in all the things</string>
+    <string name="ssn_note">To be able to register your SL Access card and get access to loss guarantee SL needs your social security number and you must have a registered address in Sweden. In order to create an account with social security number you must be over 16 years old.</string>
+    <string name="start_note">This is a unofficial app to use with your My SL account.</string>
+
+    <color name="progressbar_color">#ddd</color>
+
+    <!-- Preference -->
+
+    <string name="pref_user_username">user_username</string>
+    <string name="pref_user_password">user_password</string>
+    <string name="pref_user_fullname">user_fullname</string>
+    <string name="pref_user_firstname">user_firstname</string>
+    <string name="pref_user_lastname">user_lastname</string>
+    <string name="pref_user_email">user_email</string>
+    <string name="pref_header_general">General</string>
+    <string name="pref_header_about">About</string>
+    <string name="pref_refresh_on_start">refresh_on_start</string>
+    <string name="pref_title_refresh_on_start">Refresh on start</string>
+    <string name="pref_description_refresh_on_start">Refresh info when app starts</string>
+    <string name="pref_title_lang">Language</string>
+    <string name="pref_lang">lang</string>
+    <string name="pref_lang_en">English</string>
+    <string name="pref_lang_sv">Svenska</string>
+    <string name="rate">Rate App</string>
+    <string name="pref_title_about">About</string>
+    <string name="send_feedback_email_emailaddress">android@snilius.com</string>
+    <string name="send_feedback_email_title">My SL</string>
+    <string name="title_activity_about">About</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="send_email">Send Email</string>
+    <string name="title_activity_notofication">NotoficationActivity</string>
+    <string name="purse">SL Access Credit</string>
+    <string name="list_card_purse_title" formatted="false">SL Access Credit: %skr</string>
+    <string name="select_notify_card">Select card</string>
+    <string name="pref_alarms">alarms</string>
+    <string name="notification_subtitle" formatted="false">Expires %s</string>
+    <string name="inactive">(Inactive)</string>
+    <string name="account_created">Account Created</string>
+    <string name="about">Copyright 2014 Snilius. \n
+    \nThis application makes use of AB Storstockholms Lokaltrafik unofficial API used on https://sl.se. All communication is done through a SSL/TSL connection.\n
+    \nCard Library by Gabriele Mariotti under Apache License, Version 2.0, https://github.com/gabrielemariotti/cardslib
+    \nIon by Koushik Dutta under Apache License, Version 2.0, https://github.com/koush/ion
+    </string>
+
+</resources>

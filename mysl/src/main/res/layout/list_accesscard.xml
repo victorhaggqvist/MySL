@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginLeft="10dp"
+    android:layout_marginBottom="10dp">
+
+    <TextView
+        android:id="@+id/card_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="subtitle"
+        android:textColor="@android:color/darker_gray"
+        android:textStyle="bold"/>
+
+    <!-- if card has purse -->
+    <TextView
+        android:id="@+id/card_purse_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reskassa: 45kr"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/card_purse_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reduced Price, 3 kuponger"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/card_period_products"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Pony"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/card_empty"
+        android:text="@string/card_empty"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="18sp"/>
+</LinearLayout>
