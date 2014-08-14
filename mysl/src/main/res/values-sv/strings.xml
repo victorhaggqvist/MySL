@@ -98,4 +98,5 @@
     \nCard Library by Gabriele Mariotti under Apache License, Version 2.0, https://github.com/gabrielemariotti/cardslib
     \nIon by Koushik Dutta under Apache License, Version 2.0, https://github.com/koush/ion
     </string>
+    <string name="pref_user_uid">user_uid</string>
 </resources>

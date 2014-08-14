@@ -24,6 +24,9 @@ import com.snilius.mysl.util.Helper;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class MainActivity extends Activity
@@ -43,6 +46,7 @@ public class MainActivity extends Activity
 
     private String username, password;
     private SharedPreferences preferences;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +69,38 @@ public class MainActivity extends Activity
 
         username = preferences.getString(getString(R.string.pref_user_username), "");
         password = preferences.getString(getString(R.string.pref_user_password), "");
+
+        mTracker = ((GlobalState) getApplication()).getTracker();
+
         if (password.length()<1) {
             Log.d(TAG, "Login start flow");
             startActivityForResult(new Intent(this, LoginActivity.class), LoginActivity.REQUEST_CODE);
         }else {
+            String fullName = preferences.getString(getString(R.string.pref_user_fullname),"");
+            String email = preferences.getString(getString(R.string.pref_user_email),"");
+            String uid = preferences.getString(getString(R.string.pref_user_uid),"");
+            mNavigationDrawerFragment.setUserIfno(fullName, email);
+
+            if (uid.length()<1){
+                try {
+                    MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                    byte[] hash = digest.digest(email.getBytes("UTF-8"));
+                    uid = hash.toString();
+                    preferences.edit().putString(getString(R.string.pref_user_uid), uid).commit();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            mTracker.set("&uid", uid);
             Log.d(TAG, "Regular start flow");
             loadUserInfoFile();
         }
 
-        Tracker t = ((GlobalState) getApplication()).getTracker();
-        t.setScreenName("MainView");
-        t.send(new HitBuilders.AppViewBuilder().build());
+        mTracker.setScreenName("MainView");
+        mTracker.send(new HitBuilders.AppViewBuilder().build());
     }
 
     private void loadUserInfoFile() {
@@ -135,6 +160,7 @@ public class MainActivity extends Activity
         deleteFile(getString(R.string.file_orders));
         PreferenceManager.getDefaultSharedPreferences(this).edit().clear().commit();
         Log.i(TAG, "User signout, everything cleanup");
+        mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("User Sign Out").build());
         startActivityForResult(new Intent(this, LoginActivity.class), LoginActivity.REQUEST_CODE);
     }
 
@@ -163,6 +189,9 @@ public class MainActivity extends Activity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == LoginActivity.REQUEST_CODE){
             mNavigationDrawerFragment.selectItem(0);
+            String fullName = preferences.getString(getString(R.string.pref_user_fullname),"");
+            String email = preferences.getString(getString(R.string.pref_user_email),"");
+            mNavigationDrawerFragment.setUserIfno(fullName, email);
 //            onNavigationDrawerItemSelected(0);
         }
 //        super.onActivityResult(requestCode, resultCode, data);
