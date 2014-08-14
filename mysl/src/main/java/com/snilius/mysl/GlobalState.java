@@ -117,7 +117,7 @@ public class GlobalState extends Application{
      */
     public synchronized Tracker getTracker() {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-        analytics.setDryRun(BuildConfig.DEBUG);
+//        analytics.setDryRun(BuildConfig.DEBUG);
         if (BuildConfig.DEBUG) {
             analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
         }
