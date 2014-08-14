@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 buildscript {
     repositories {
         mavenCentral()
@@ -40,6 +42,10 @@ android {
 
             runProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            applicationVariants.all { variant ->
+                def file = variant.outputFile
+                variant.outputFile = new File(file.parent, file.name.replace(".apk", "-" + defaultConfig.versionName + "_" + defaultConfig.versionCode + "_${buildTime()}.apk"))
+            }
         }
 
         debug {
@@ -73,4 +79,10 @@ if (propFile.canRead()){
 } else {
     println 'release.properties not found'
     android.buildTypes.release.signingConfig = null
+}
+
+def buildTime() {
+    def df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm")
+    df.setTimeZone(TimeZone.getTimeZone("UTC"))
+    return df.format(new Date())
 }
