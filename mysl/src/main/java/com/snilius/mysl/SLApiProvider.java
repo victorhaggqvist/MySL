@@ -35,16 +35,15 @@ public class SLApiProvider{
     public SLApiProvider(Context context) {
         mContext = context;
         requestGroup = new Object();
-        // workaround since ion just merges all cookies which results in duplicates
-        // start every session clean
-
+//        Ion.getDefault(context).configure().proxy("192.168.1.238", 8888);
 //        Ion.getDefault(context).configure().setLogging("MyLogs", Log.DEBUG);
     }
 
     public void authenticate(Context context, FutureCallback<Response<JsonObject>> callback, String username, String password){
-//        System.out.println("coookiess "+new CookieMiddleware(context,"ion").getCookieStore().getCookies());
+
+        // workaround since ion just merges all cookies which results in duplicates
         new CookieMiddleware(context,"ion").clear();
-//        System.out.println("coookiess "+new CookieMiddleware(context,"ion").getCookieStore().getCookies());
+
         sessionStart = System.currentTimeMillis();
         JsonObject json = new JsonObject();
         json.addProperty("username", username);
@@ -64,7 +63,6 @@ public class SLApiProvider{
     public void getShoppingCart(Context context, FutureCallback<Response<JsonObject>> callback){
         Ion.with(context)
                 .load(ECOM_ENDPOINT + "/GetShoppingCart")
-//                .setHeader("Cookie", cookieHeader)
                 .setHeader("User-Agent", USER_AGENT)
                 .setHeader("Referer", "https://sl.se/sv/mitt-sl/konto/")
                 .setHeader("Accept", "application/json, text/plain, */*")
