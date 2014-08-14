@@ -66,6 +66,7 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
     private ArrayList<String> mCardNames;
     private ArrayList<String> mCardEpireDate;
     private ArrayList<Integer> mCardIdHash;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +93,10 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
         mCardIdHash = new ArrayList<Integer>();
         gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         setup();
-        Tracker t = ((GlobalState) getApplication()).getTracker();
-        t.setScreenName("CardView");
-        t.send(new HitBuilders.AppViewBuilder().build());
+
+        mTracker = ((GlobalState) getApplication()).getTracker();
+        mTracker.setScreenName("CardView");
+        mTracker.send(new HitBuilders.AppViewBuilder().build());
     }
 
     private void setup() {
@@ -249,6 +251,7 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
             }
         });
         builder.create().show();
+        mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("Add Notification").build());
     }
 
     private class GetTravelCardDetailsCallback implements FutureCallback<Response<JsonObject>> {
