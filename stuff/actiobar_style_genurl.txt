@@ -1,0 +1,1 @@
+https://jgilfelt.github.io/android-actionbarstylegenerator/#name=MySL&compat=holo&theme=light&actionbarstyle=solid&texture=0&hairline=0&neutralPressed=1&backColor=019cd5%2C100&secondaryColor=D6D6D6%2C100&tabColor=019cd5%2C100&tertiaryColor=F2F2F2%2C100&accentColor=33B5E5%2C100&cabBackColor=FFFFFF%2C100&cabHighlightColor=33B5E5%2C100 
