@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -52,6 +53,8 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
+    private TextView mFullName;
+    private TextView mEmail;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -88,8 +91,13 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
-                R.layout.fragment_navigation_drawer, container, false);
+
+        View root = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+
+        mFullName = (TextView) root.findViewById(R.id.nav_fullname);
+        mEmail = (TextView) root.findViewById(R.id.nav_email);
+
+        mDrawerListView = (ListView) root.findViewById(R.id.nav_menu);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -106,7 +114,7 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section_signout)
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+        return root;
     }
 
     public boolean isDrawerOpen() {
@@ -185,6 +193,11 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    public void setUserIfno(String fullName, String email){
+        mFullName.setText(fullName);
+        mEmail.setText(email);
     }
 
     public void selectItem(int position) {

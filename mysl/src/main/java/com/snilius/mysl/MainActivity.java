@@ -69,6 +69,9 @@ public class MainActivity extends Activity
             Log.d(TAG, "Login start flow");
             startActivityForResult(new Intent(this, LoginActivity.class), LoginActivity.REQUEST_CODE);
         }else {
+            String fullName = preferences.getString(getString(R.string.pref_user_fullname),"");
+            String email = preferences.getString(getString(R.string.pref_user_email),"");
+            mNavigationDrawerFragment.setUserIfno(fullName, email);
             Log.d(TAG, "Regular start flow");
             loadUserInfoFile();
         }
