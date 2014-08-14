@@ -189,6 +189,9 @@ public class MainActivity extends Activity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == LoginActivity.REQUEST_CODE){
             mNavigationDrawerFragment.selectItem(0);
+            String fullName = preferences.getString(getString(R.string.pref_user_fullname),"");
+            String email = preferences.getString(getString(R.string.pref_user_email),"");
+            mNavigationDrawerFragment.setUserIfno(fullName, email);
 //            onNavigationDrawerItemSelected(0);
         }
 //        super.onActivityResult(requestCode, resultCode, data);
