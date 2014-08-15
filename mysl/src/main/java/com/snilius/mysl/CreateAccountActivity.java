@@ -31,14 +31,14 @@ public class CreateAccountActivity extends Activity {
 
     private boolean allValid = false;
 
-    TextView username;
-    TextView fname;
-    TextView lname;
-    TextView email;
-    TextView pw1;
-    TextView pw2;
-    TextView ssn;
-    CheckBox terms;
+    private TextView username;
+    private TextView fname;
+    private TextView lname;
+    private TextView email;
+    private TextView pw1;
+    private TextView pw2;
+    private TextView ssn;
+    private CheckBox terms;
     private Tracker mTracker;
 
     @Override
