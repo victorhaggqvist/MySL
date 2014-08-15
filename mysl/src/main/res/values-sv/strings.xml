@@ -23,7 +23,7 @@
     <string name="error_login_credentials">Inloggningen misslyckades. Kontrollera ditt användarnamn och lösenord.</string>
     <string name="error_connectivity">Kunde inte ansluta till sl.se</string>
     <string name="reduced_price">Reducerat pris</string>
-    <string name="pref_title_refresh_on_start">Upddatera info vid start</string>
+    <string name="pref_title_refresh_on_start">Uppdatera info vid start</string>
     <string name="pref_description_refresh_on_start">Uppdatera info när appen startar</string>
     <string name="full_price">Fullt pris</string>
     <string name="sl_access_credit">Reskassa</string>
