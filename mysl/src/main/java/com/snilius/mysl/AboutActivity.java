@@ -22,5 +22,7 @@ public class AboutActivity extends Activity {
         // set appname with version dynamicly
         TextView version = (TextView) findViewById(R.id.version);
         version.setText(getString(R.string.app_name) + " " + GlobalState.APP_VERSION);
+
+        // REVIEW Maby remove SSL mention in about text, might just be confusing for user?
     }
 }
