@@ -39,6 +39,7 @@ public class CreateAccountActivity extends Activity {
     TextView pw2;
     TextView ssn;
     CheckBox terms;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,9 +152,7 @@ public class CreateAccountActivity extends Activity {
 
         terms = (CheckBox) findViewById(R.id.create_agreeterms);
 
-        Tracker t = ((GlobalState) getApplication()).getTracker();
-        t.setScreenName("CreateAccountView");
-        t.send(new HitBuilders.AppViewBuilder().build());
+        mTracker = ((GlobalState) getApplication()).getTracker();
     }
 
     private void validText(TextView textView, String msg) {
@@ -211,10 +210,14 @@ public class CreateAccountActivity extends Activity {
 
             SLApiProvider sl = new SLApiProvider(this);
             sl.createAccount(this, new CreateAccountCallback(), json);
+            mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("Create account").setLabel("Valid submission").build());
+        }else {
+            mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("Create account").setLabel("Invalid submission").build());
         }
     }
 
     public void showTerms(View view) {
+        mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("Create account").setLabel("View terms").build());
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
 
@@ -234,8 +237,10 @@ public class CreateAccountActivity extends Activity {
                 System.out.println("fail");
                 if (e instanceof TimeoutException)
                     Toast.makeText(getApplicationContext(), getString(R.string.error_connectivity), Toast.LENGTH_LONG).show();
+                mTracker.send(new HitBuilders.EventBuilder().setCategory("Network").setAction("Create account").setLabel("Network fail").build());
             }else if (result.getHeaders().getResponseCode() == 200){
                 Toast.makeText(getApplicationContext(), getString(R.string.account_created), Toast.LENGTH_LONG).show();
+                mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("Create account").setLabel("Successfull creation").build());
                 finish();
             }
         }

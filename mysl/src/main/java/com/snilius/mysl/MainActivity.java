@@ -98,9 +98,6 @@ public class MainActivity extends Activity
             Log.d(TAG, "Regular start flow");
             loadUserInfoFile();
         }
-
-        mTracker.setScreenName("MainView");
-        mTracker.send(new HitBuilders.AppViewBuilder().build());
     }
 
     private void loadUserInfoFile() {

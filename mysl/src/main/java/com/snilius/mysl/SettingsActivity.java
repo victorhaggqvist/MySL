@@ -50,14 +50,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
     private int fool = 0;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
-        Tracker t = ((GlobalState) getApplication()).getTracker();
-        t.setScreenName("SettingsView");
-        t.send(new HitBuilders.AppViewBuilder().build());
+        mTracker = ((GlobalState) getApplication()).getTracker();
     }
 
     /**
@@ -185,6 +184,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         if (preference.getKey().equals("about_legal")){
             startActivity(new Intent(this,AboutActivity.class));
         }else if (preference.getKey().equals("about_contact")){
+            mTracker.send(new HitBuilders.EventBuilder().setCategory("About").setAction("Email").build());
             final Intent emailIntent = new Intent(Intent.ACTION_SEND);
             emailIntent.setType("plain/text");
             emailIntent.putExtra(
@@ -196,15 +196,19 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             startActivity(Intent.createChooser(emailIntent, getText(R.string.send_email)));
         }else if (preference.getKey().equals("about_rate")) {
             try {
+                mTracker.send(new HitBuilders.EventBuilder().setCategory("About").setAction("Rate").build());
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.snilius.mysl")));
             } catch (android.content.ActivityNotFoundException anfe) {
+                mTracker.send(new HitBuilders.EventBuilder().setCategory("About").setAction("Rate").setLabel("No Google Play").build());
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=com.snilius.mysl")));
             }
         }else if (preference.getKey().equals("about_version")){
             fool++;
-            if (fool == 15)
+            if (fool == 15) {
                 Toast.makeText(this, "Die in 5", Toast.LENGTH_SHORT).show();
-            else if (fool == 20) {
+                mTracker.send(new HitBuilders.EventBuilder().setCategory("About").setAction("About to die").build());
+            }else if (fool == 20) {
+                mTracker.send(new HitBuilders.EventBuilder().setCategory("About").setAction("Intentional death").build());
                 int die = 1/0;
             }
         }
@@ -254,7 +258,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals("lang")){
             ((GlobalState) getApplication()).reloadLocaleForApplication();
+            String lang = sharedPreferences.getString(getString(R.string.pref_lang),"");
+            mTracker.send(new HitBuilders.EventBuilder().setCategory("Settings").setAction("Language").setLabel(lang).build());
             Toast.makeText(this,"Restart the app for full effect", Toast.LENGTH_LONG).show();
+        }else {
+            String refreshPref = sharedPreferences.getBoolean(getString(R.string.pref_refresh_on_start), true)?"1":"0";
+            mTracker.send(new HitBuilders.EventBuilder().setCategory("Settings").setAction("Refresh on start").setLabel(refreshPref).build());
         }
     }
 

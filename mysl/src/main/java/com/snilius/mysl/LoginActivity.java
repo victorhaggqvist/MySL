@@ -103,8 +103,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         progressBar.setIndeterminate(true);
 
         mTracker = ((GlobalState) getApplication()).getTracker();
-        mTracker.setScreenName("LoginView");
-        mTracker.send(new HitBuilders.AppViewBuilder().build());
     }
 
     @Override

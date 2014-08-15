@@ -95,8 +95,6 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
         setup();
 
         mTracker = ((GlobalState) getApplication()).getTracker();
-        mTracker.setScreenName("CardView");
-        mTracker.send(new HitBuilders.AppViewBuilder().build());
     }
 
     private void setup() {
