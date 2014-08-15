@@ -53,6 +53,9 @@ no | Summer ticket | Vaild through 1 may - 31 august, don't know if different fr
 - Add monitoring of purse, to add notification when it goes empty
 - (Hope that SL doesn't change their APIs in the near future)
 
+#Thanks
+- Fabian Miiro, [@iloban](https://twitter.com/iloabn) for sampel data.
+
 #License
 	MySL - A unofficiall Android client for the "Mitt SL" part of http://sl.se
     Copyright (C) 2014  Victor Häggqvist
