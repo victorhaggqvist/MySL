@@ -106,5 +106,6 @@
     </string>
     <string name="login_fail">Login failed</string>
     <string name="pref_user_uid">user_uid</string>
+    <string name="lang_change_app_restart">Restart the app for full effect</string>
 
 </resources>

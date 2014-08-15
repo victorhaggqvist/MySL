@@ -260,7 +260,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             ((GlobalState) getApplication()).reloadLocaleForApplication();
             String lang = sharedPreferences.getString(getString(R.string.pref_lang),"");
             mTracker.send(new HitBuilders.EventBuilder().setCategory("Settings").setAction("Language").setLabel(lang).build());
-            Toast.makeText(this,"Restart the app for full effect", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,getString(R.string.lang_change_app_restart), Toast.LENGTH_LONG).show();
         }else {
             String refreshPref = sharedPreferences.getBoolean(getString(R.string.pref_refresh_on_start), true)?"1":"0";
             mTracker.send(new HitBuilders.EventBuilder().setCategory("Settings").setAction("Refresh on start").setLabel(refreshPref).build());
