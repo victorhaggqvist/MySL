@@ -1,6 +1,6 @@
 My SL
 =====
-A Android application for Mitt SL, https://sl.se/sv/mitt-sl/.
+A unofficial Android application for Mitt SL, https://sl.se/sv/mitt-sl/.
 
 ####Freatures
 - View Access Cards
