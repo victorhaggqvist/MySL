@@ -21,7 +21,6 @@ import java.util.Locale;
 public class GlobalState extends Application{
 
     public static final String TAG = "GSMySL";
-    public static String ANALYTICS_PROPERY_KEY = "UA-53767510-1";
     public static String APP_VERSION = BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")";
 
     private JsonObject mShoppingCart;
@@ -31,6 +30,7 @@ public class GlobalState extends Application{
     private boolean refresh;
     private boolean addCardDialogOpen;
     private String addCardDialogMsg;
+    private Tracker mTracker;
 
     public GlobalState() { }
 
@@ -64,6 +64,7 @@ public class GlobalState extends Application{
             conf.locale = locale;
             res.updateConfiguration(conf, dm);
         }
+        mTracker = setupTracker();
     }
 
     public JsonObject getmShoppingCart() {
@@ -115,12 +116,18 @@ public class GlobalState extends Application{
      * Get analytics tracker.
      * @return A Tracker
      */
-    public synchronized Tracker getTracker() {
+    private synchronized Tracker setupTracker() {
         GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-//        analytics.setDryRun(BuildConfig.DEBUG);
+        analytics.enableAutoActivityReports(this);
+        analytics.setDryRun(BuildConfig.DEBUG);
         if (BuildConfig.DEBUG) {
             analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
+            analytics.setLocalDispatchPeriod(10);
         }
-        return analytics.newTracker(ANALYTICS_PROPERY_KEY);
+        return analytics.newTracker(R.xml.tracker);
+    }
+
+    public synchronized Tracker getTracker() {
+        return mTracker;
     }
 }
