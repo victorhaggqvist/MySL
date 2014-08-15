@@ -6,7 +6,7 @@
     <!-- Enable automatic Activity measurement -->
     <bool name="ga_autoActivityTracking">true</bool>
 
-    <string name="ga_appVersion">Version0.1</string>
+    <string name="ga_appVersion">Version0.2</string>
 
     <!-- The screen names that will appear in reports -->
     <screenName name="com.snilius.mysl.MainActivity">MainView</screenName>
