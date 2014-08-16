@@ -136,6 +136,25 @@ public class SLApiProvider{
                 .setCallback(callback);
     }
 
+    public void forgotUsername(Context context, FutureCallback<Response<JsonObject>> callback, String email){
+        JsonObject postBody = new JsonObject();
+        JsonObject sub = new JsonObject();
+        sub.addProperty("email",email);
+        postBody.add("user_account",sub);
+        Ion.with(context)
+                .load(MYSL_ENDPOINT + "/ForgotUsername")
+                .setHeader("User-Agent", USER_AGENT)
+                .setHeader("Referer", "https://sl.se/sv/mitt-sl/inloggning//")
+                .setHeader("Accept", "application/json, text/plain, */*")
+                .setHeader("Pragma", "no-cache")
+                .setHeader("Content-Type", "application/json;charset=utf-8")
+                .setJsonObjectBody(postBody)
+                .group(requestGroup)
+                .asJsonObject()
+                .withResponse()
+                .setCallback(callback);
+    }
+
     public void killRequests(){
         Ion.getDefault(mContext).cancelAll(requestGroup);
     }
