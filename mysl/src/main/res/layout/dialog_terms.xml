@@ -23,7 +23,7 @@
                 style="?android:attr/textAppearanceLarge"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:text="Terms"
+                android:text="@string/terms_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="viewStart"

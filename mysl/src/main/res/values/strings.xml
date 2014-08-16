@@ -108,4 +108,6 @@
     <string name="pref_user_uid">user_uid</string>
     <string name="lang_change_app_restart">Restart the app for full effect</string>
 
+    <string name="terms_title">Terms</string>
+
 </resources>
