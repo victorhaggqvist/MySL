@@ -35,7 +35,7 @@ Rename card | no | **no**
 
 ###Period ticket cases
 Tested | Case | Edges | Tested Ticket
---|:-----|:---------|:--
+:--|:-----|:---------|:--
 yes | Regular period | Start and stop set. Ticket valid. Student ticket. | 30 day (student)
 yes | Inactive | Start and stop NOT set. Ticket valid. Student ticket. | 30 day (student)
 yes | Multiple tickets | Two tickets in array | 30 day (student) + 30 day inactive (student)
