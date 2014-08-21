@@ -167,6 +167,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     card.setPurseEnabled(bbc.isPurseEnabled());
                     card.setPurseSubtitle(getString(bbc.getPassengerTypeStringId()), bbc.getCouponCount());
                     card.setPurseValue(Integer.toString(bbc.getPurseValue()));
+                    card.setInfoLoaded(true);
                 }
 
                 card.setOnClickListener(new Card.OnCardClickListener() {
@@ -235,6 +236,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
      * @param data
      */
     private void applyCardDetail(AccessCard listCard, JsonObject data) {
+        listCard.setInfoLoaded(true);
         if (DetailCardHelper.with(data).hasPurse())
             listCard.setPurseValue(DetailCardHelper.with(data).getPurseValueExt());
 

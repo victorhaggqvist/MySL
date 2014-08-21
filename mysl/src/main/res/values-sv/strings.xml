@@ -77,7 +77,7 @@
     <string name="title_activity_about">Om</string>
     <string name="login_fail">Inloggingen misslyckades</string>
     <string name="lang_change_app_restart">Starta om appen för full effect</string>
-
+    <string name="loading">Laddar...</string>
 
     <!-- Do not translate -->
     <string name="file_shoppingcart">userinfo</string>

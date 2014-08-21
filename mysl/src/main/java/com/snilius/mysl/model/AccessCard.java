@@ -35,6 +35,7 @@ public class AccessCard extends Card {
 
     private CardHeader header;
     private Resources res;
+    private boolean infoLoaded = false;
 
     public AccessCard(Context context, String headerText, String serialNumber) {
         this(context, R.layout.list_accesscard);
@@ -87,6 +88,10 @@ public class AccessCard extends Card {
         if (!mCardEmpty && cardEmptyMsg != null){
             cardEmptyMsg.setVisibility(View.GONE);
         }else if (cardEmptyMsg != null){
+            if (infoLoaded)
+                cardEmptyMsg.setText(res.getString(R.string.card_empty));
+            else
+                cardEmptyMsg.setText(res.getString(R.string.loading));
             cardEmptyMsg.setVisibility(View.VISIBLE);
         }
     }
@@ -139,6 +144,10 @@ public class AccessCard extends Card {
 
     public boolean isCardEmpty(){
         return cardEmptyMsg.getVisibility()==View.VISIBLE;
+    }
+
+    public void setInfoLoaded(boolean infoLoaded) {
+        this.infoLoaded = infoLoaded;
     }
 
     @Override
