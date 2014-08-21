@@ -399,6 +399,10 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 mSwipeRefreshLayout.setRefreshing(false);
             } else if (result.getHeaders().getResponseCode() == 200){
                 Log.d(TAG, "GetTravelCardDetails successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+
+                if (null == result.getResult()) // if request was likly killed
+                    return;
+
                 JsonObject data = result.getResult().getAsJsonObject("data");
                 try {
                     Helper.saveToFile(getActivity(), getFileName(), data.toString());
