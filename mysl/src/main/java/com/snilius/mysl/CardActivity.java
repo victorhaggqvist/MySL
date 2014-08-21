@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
@@ -67,6 +68,8 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
     private ArrayList<String> mCardEpireDate;
     private ArrayList<Integer> mCardIdHash;
     private Tracker mTracker;
+    private SharedPreferences preferences;
+    private String lang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,8 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
                 android.R.color.holo_blue_dark,
                 android.R.color.holo_blue_light);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        lang = preferences.getString(getString(R.string.pref_lang),"en");
 
 //        mNameHeader = (TextView) findViewById(R.id.card_detail_name);
         mCardList = (CardListView) findViewById(R.id.card_detail_list);
@@ -173,8 +178,11 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
                     mCardEpireDate.add(p.getEndDate().split("T")[0]);
                     mCardIdHash.add(p.getProductIdHash());
 
-                    card = new ProductCard(this, p.getProductType(), p.getStartDateExt(),
-                            p.getEndDateExt(), p.getProductPrice());
+                    String start = Helper.localizeAndFormatDate(p.getStartDate(), lang);
+                    String end = Helper.localizeAndFormatDate(p.getEndDate(), lang);
+
+                    card = new ProductCard(this, p.getProductType(), start,
+                            end, p.getProductPrice());
                 }else {
                     card = new ProductCard(this, p.getProductType(), getString(R.string.inactive), null, p.getProductPrice());
                 }

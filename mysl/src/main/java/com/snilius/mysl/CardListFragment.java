@@ -1,9 +1,11 @@
 package com.snilius.mysl;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
 import android.app.Fragment;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,6 +69,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
     private SLApiProvider sl;
     private GlobalState gs;
     private boolean initWasRefresh;
+    private SharedPreferences pref;
 
     /**
      * Use this factory method to create a new instance of
@@ -99,6 +102,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
         Tracker t = ((GlobalState) getActivity().getApplication()).getTracker();
         t.setScreenName("CardListView");
         t.send(new HitBuilders.AppViewBuilder().build());
+        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }
 
     @Override
@@ -255,8 +259,14 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 productString += cp.getProductType() + "\n";
                 if (null == cp.getEndDate())
                     productString += gs.getString(R.string.inactive) + "\n";
-                else
-                    productString += cp.getEndDateExt() + "\n";
+                else {
+                    String lang = pref.getString(getString(R.string.pref_lang),"en");
+                    String date = cp.getEndDate();
+
+                    String formatted = Helper.localizeAndFormatDate(date, lang);
+
+                    productString += formatted + "\n";
+                }
             }
             productString = productString.substring(0, productString.length() - 1);
             listCard.setCardProducts(productString);
