@@ -103,6 +103,7 @@
     \nThis application makes use of AB Storstockholms Lokaltrafik unofficial API used on https://sl.se. All communication is done through a SSL/TSL connection.\n
     \nCard Library by Gabriele Mariotti under Apache License, Version 2.0, https://github.com/gabrielemariotti/cardslib
     \nIon by Koushik Dutta under Apache License, Version 2.0, https://github.com/koush/ion
+    \nGson by Google under Apache License, Version 2.0, https://code.google.com/p/google-gson
     </string>
     <string name="login_fail">Login failed</string>
     <string name="pref_user_uid">user_uid</string>
