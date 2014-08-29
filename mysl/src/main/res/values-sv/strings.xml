@@ -100,4 +100,6 @@
     \nIon by Koushik Dutta under Apache License, Version 2.0, https://github.com/koush/ion
     </string>
     <string name="pref_user_uid">user_uid</string>
+    <string name="notifications_not_eligible_title">Inga notifieringar</string>
+    <string name="notifications_not_eligible_msg">Du har inga biljetter med notifieringsmöjligheter. Endast periodbiljetter kan ha notifieringar.</string>
 </resources>

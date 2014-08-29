@@ -218,7 +218,18 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
      * Choose card to add notification on
      */
     private void addNotification() {
-        if (mCardNames.size()>1) {
+        if (mCardNames.size()<1){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(getString(R.string.notifications_not_eligible_title))
+                    .setMessage(getString(R.string.notifications_not_eligible_msg))
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // nop
+                        }
+                    })
+                    .create().show();
+        }else if (mCardNames.size()>1) {
             String[] names = mCardNames.toArray(new String[mCardNames.size()]);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.select_notify_card))
