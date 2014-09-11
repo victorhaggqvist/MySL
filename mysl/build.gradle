@@ -28,8 +28,8 @@ android {
         applicationId "com.snilius.mysl"
         minSdkVersion 14
         targetSdkVersion 20
-        versionCode 8
-        versionName "0.3" // remember to bump ga version too
+        versionCode 9
+        versionName "0.4" // remember to bump ga version too
     }
 
     signingConfigs {
