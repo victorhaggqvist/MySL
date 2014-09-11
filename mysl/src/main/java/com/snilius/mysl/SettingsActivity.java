@@ -106,26 +106,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             return;
         }
 
-        // In the simplified UI, fragments are not used at all and we instead
-        // use the older PreferenceActivity APIs.
+        addPreferencesFromResource(R.xml.prefs);
 
-        // Add 'general' preferences.
-        PreferenceCategory fakeHeader = new PreferenceCategory(this);
-        // why NPE here??
-//        fakeHeader.setTitle(R.string.pref_header_general);
-//        getPreferenceScreen().addPreference(fakeHeader);
-        addPreferencesFromResource(R.xml.pref_general);
-
-        // Add 'notifications' preferences, and a corresponding header.
-        fakeHeader = new PreferenceCategory(this);
-        fakeHeader.setTitle(R.string.pref_header_about);
-        getPreferenceScreen().addPreference(fakeHeader);
-        addPreferencesFromResource(R.xml.pref_about);
-
-
-//        // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
-//        // their values. When their values change, their summaries are updated
-//        // to reflect the new value, per the Android Design guidelines.
+        // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
+        // their values. When their values change, their summaries are updated
+        // to reflect the new value, per the Android Design guidelines.
         bindPreferenceSummaryToValue(findPreference("lang"));
         loadVersioninfo();
     }
@@ -165,9 +150,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      * "simplified" settings UI should be shown.
      */
     private static boolean isSimplePreferences(Context context) {
-        return ALWAYS_SIMPLE_PREFS
-                || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
-                || !isXLargeTablet(context);
+        return true; // one page settings for every one! Atleast better than FC
+//        return ALWAYS_SIMPLE_PREFS
+//                || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
+//                || !isXLargeTablet(context);
     }
 
     /** {@inheritDoc} */
