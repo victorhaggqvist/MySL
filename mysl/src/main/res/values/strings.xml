@@ -100,10 +100,12 @@
     <string name="inactive">(Inactive)</string>
     <string name="account_created">Account Created</string>
     <string name="about">Copyright 2014 Snilius. \n
+    <string name="about" translatable="false">Copyright 2014 Snilius. \n
     \nThis application makes use of AB Storstockholms Lokaltrafik unofficial API used on https://sl.se. All communication is done through a SSL/TSL connection.\n
     \nCard Library by Gabriele Mariotti under Apache License, Version 2.0, https://github.com/gabrielemariotti/cardslib
     \nIon by Koushik Dutta under Apache License, Version 2.0, https://github.com/koush/ion
     \nGson by Google under Apache License, Version 2.0, https://code.google.com/p/google-gson
+    \n\nThis application, My SL, is distributed under the GPLv3 license. View the source and contribute at https://github.com/victorhaggqvist/MySL
     </string>
     <string name="login_fail">Login failed</string>
     <string name="pref_user_uid">user_uid</string>
