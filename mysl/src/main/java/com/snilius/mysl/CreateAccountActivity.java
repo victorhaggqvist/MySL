@@ -199,8 +199,16 @@ public class CreateAccountActivity extends Activity {
             cust.addProperty("first_name", fname.getText().toString());
             cust.addProperty("last_name", lname.getText().toString());
             cust.addProperty("email", email.getText().toString());
-            cust.addProperty("birth_date", ssn.getText().toString().split("-")[0]);
-            cust.addProperty("person_number", ssn.getText().toString().split("-")[1]);
+            String[] ssnSplit = ssn.getText().toString().split("-");
+            if (ssnSplit.length==2) {
+                cust.addProperty("birth_date", ssnSplit[0]);
+                cust.addProperty("person_number", ssnSplit[1]);
+            } else {
+                ssn.setError(getString(R.string.create_err_invalid_ssn));
+                allValid = false;
+                return;
+            }
+
             userAccount.add("private_customer", cust);
 
             json.add("user_account", userAccount);
