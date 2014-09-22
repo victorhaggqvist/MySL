@@ -157,6 +157,8 @@ public class MainActivity extends Activity
         deleteFile(getString(R.string.file_orders));
         PreferenceManager.getDefaultSharedPreferences(this).edit().clear().commit();
         Log.i(TAG, "User signout, everything cleanup");
+        if (null == mTracker)
+            mTracker = ((GlobalState) getApplication()).getTracker();
         mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("User Sign Out").build());
         startActivityForResult(new Intent(this, LoginActivity.class), LoginActivity.REQUEST_CODE);
     }
