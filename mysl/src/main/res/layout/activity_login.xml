@@ -54,16 +54,6 @@
             android:id="@+id/password"
             android:hint="@string/password_hint" />
 
-        <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/login_progress"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp"
-            android:visibility="gone"/>
-
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

@@ -1,6 +1,7 @@
 package com.snilius.mysl;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,7 +45,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private boolean mLoginInprogress = false;
 
     private boolean allValid = false;
-    private ProgressBar progressBar;
+    private ProgressDialog mProgressDialog;
     private SLApiProvider sl;
     private Tracker mTracker;
 //    private FrameLayout decorView;
@@ -99,10 +100,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             password.setText(ld.getPass());
         }
 
-        progressBar = (ProgressBar) findViewById(R.id.login_progress);
-        progressBar.setIndeterminate(true);
-
         mTracker = ((GlobalState) getApplication()).getTracker();
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage(getString(R.string.login_load_dialog));;
+        mProgressDialog.setIndeterminate(true);
     }
 
     @Override
@@ -128,7 +129,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
+        mProgressDialog.show();
         sl = new SLApiProvider(this);
         String user = username.getText().toString();
         String passwd = password.getText().toString();
@@ -146,7 +147,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 Toast.makeText(getApplication(), getString(R.string.login_fail), Toast.LENGTH_LONG).show();
                 login_error.setText(getString(R.string.error_connectivity));
                 login_error.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
+                mProgressDialog.dismiss();
                 mLoginInprogress = false;
                 mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("SL Connection Issue").build());
                 return;
@@ -156,7 +157,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 login_error.setText(getString(R.string.error_login_credentials));
                 login_error.setVisibility(View.VISIBLE);
                 Log.i(TAG, result.getResult().toString());
-                progressBar.setVisibility(View.GONE);
+                mProgressDialog.dismiss();
                 mLoginInprogress = false;
                 mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("User Sign In Fail").build());
                 return;
@@ -217,7 +218,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             }
 
 //            System.out.println(response.getAsJsonObject("data").get("UserAutenticated").getAsBoolean());
-            progressBar.setVisibility(View.GONE);
+            mProgressDialog.dismiss();
             mLoginInprogress = false;
         }
     }
