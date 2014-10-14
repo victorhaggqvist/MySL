@@ -15,12 +15,12 @@ import com.google.gson.JsonObject;
 
 import java.util.Locale;
 
+import timber.log.Timber;
+
 /**
  * Created by victor on 7/20/14.
  */
 public class GlobalState extends Application{
-
-    public static final String TAG = "GSMySL";
     public static String APP_VERSION = BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")";
 
     private JsonObject mShoppingCart;
@@ -38,6 +38,11 @@ public class GlobalState extends Application{
     public void onCreate() {
         super.onCreate();
         reloadLocaleForApplication();
+
+        if (BuildConfig.DEBUG)
+            Timber.plant(new Timber.DebugTree());
+        else
+            Timber.plant(new CrashReportingTree());
     }
 
     public void reloadLocaleForApplication() {
@@ -45,7 +50,7 @@ public class GlobalState extends Application{
                 .getDefaultSharedPreferences(getApplicationContext());
 
         String language = sharedPreferences.getString(getString(R.string.pref_lang), "system");
-        Log.d(TAG, "Preferred language: " + language);
+        Timber.d("Preferred language: " + language);
 
         Locale locale = null;
         if ("sv".equals(language)) {
@@ -57,7 +62,7 @@ public class GlobalState extends Application{
         }
 
         if (locale != null) {
-            Log.d(TAG, "setting locale " + locale);
+            Timber.d("setting locale " + locale);
             Resources res = getResources();
             DisplayMetrics dm = res.getDisplayMetrics();
             Configuration conf = res.getConfiguration();
@@ -129,5 +134,25 @@ public class GlobalState extends Application{
 
     public synchronized Tracker getTracker() {
         return mTracker;
+    }
+
+    private static class CrashReportingTree extends Timber.HollowTree {
+        @Override public void i(String message, Object... args) {
+            // TODO e.g., Crashlytics.log(String.format(message, args));
+        }
+
+        @Override public void i(Throwable t, String message, Object... args) {
+            i(message, args); // Just add to the log.
+        }
+
+        @Override public void e(String message, Object... args) {
+            i("ERROR: " + message, args); // Just add to the log.
+        }
+
+        @Override public void e(Throwable t, String message, Object... args) {
+            e(message, args);
+
+            // TODO e.g., Crashlytics.logException(t);
+        }
     }
 }
