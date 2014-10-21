@@ -156,8 +156,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             if (result.getHeaders().getResponseCode() != 200){
                 login_error.setText(getString(R.string.error_login_credentials));
                 login_error.setVisibility(View.VISIBLE);
-                Log.i(TAG, result.getResult().toString());
+
                 mProgressDialog.dismiss();
+
+//                Log.i(TAG, result.getResult().toString());
+
                 mLoginInprogress = false;
                 mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("User Sign In Fail").build());
                 return;
