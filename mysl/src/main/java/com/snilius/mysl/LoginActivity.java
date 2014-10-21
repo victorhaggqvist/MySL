@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.gson.JsonObject;
@@ -154,11 +155,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             }
 
             if (result.getHeaders().getResponseCode() != 200){
-                login_error.setText(getString(R.string.error_login_credentials));
+                if (result.getHeaders().getResponseCode() == 403)
+                    login_error.setText(getString(R.string.error_login_credentials));
+                else
+                    login_error.setText(getString(R.string.error_connectivity));
                 login_error.setVisibility(View.VISIBLE);
 
                 mProgressDialog.dismiss();
-
+                Crashlytics.setString("Login response: ", result.getHeaders().getStatusLine());
 //                Log.i(TAG, result.getResult().toString());
 
                 mLoginInprogress = false;
