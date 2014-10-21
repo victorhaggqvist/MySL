@@ -18,7 +18,7 @@ Run at startup: Only used if you set notifications, needed for scheduling notifi
 Case | Available | Tested
 :-------|:-------|:--
 My SL login | yes | yes
-View Accesscards | yes | yes
+View Accesscards | yes | **somewhat**, 0 existing cards are not etested
 View onlile orders | yes | yes
 View purse value | yes | yes
 View purse standard ride | yes | yes
