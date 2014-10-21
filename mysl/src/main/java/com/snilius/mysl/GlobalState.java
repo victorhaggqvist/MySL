@@ -6,8 +6,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
@@ -18,7 +18,8 @@ import java.util.Locale;
 import timber.log.Timber;
 
 /**
- * Created by victor on 7/20/14.
+ * @author Victor Häggqvist
+ * @since 7/20/14
  */
 public class GlobalState extends Application{
     public static String APP_VERSION = BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")";
@@ -37,12 +38,15 @@ public class GlobalState extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        reloadLocaleForApplication();
-
-        if (BuildConfig.DEBUG)
+        if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
-        else
+        } else {
             Timber.plant(new CrashReportingTree());
+            Crashlytics.start(this);
+        }
+
+        reloadLocaleForApplication();
+        mTracker = setupTracker();
     }
 
     public void reloadLocaleForApplication() {
@@ -69,7 +73,6 @@ public class GlobalState extends Application{
             conf.locale = locale;
             res.updateConfiguration(conf, dm);
         }
-        mTracker = setupTracker();
     }
 
     public JsonObject getmShoppingCart() {
@@ -133,6 +136,8 @@ public class GlobalState extends Application{
     }
 
     public synchronized Tracker getTracker() {
+        if (mTracker == null)
+            mTracker = setupTracker();
         return mTracker;
     }
 
