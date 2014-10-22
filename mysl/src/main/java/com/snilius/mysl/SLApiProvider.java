@@ -86,6 +86,7 @@ public class SLApiProvider{
                 .setHeader("Referer", "https://sl.se/sv/mitt-sl/konto/")
                 .setHeader("Accept", "application/json, text/plain, */*")
                 .setHeader("Pragma", "no-cache")
+                .setHeader("Content-Type", "application/json;charset=UTF-8")
                 .setJsonObjectBody(requestBody)
                 .group(requestGroup)
                 .asJsonObject()
