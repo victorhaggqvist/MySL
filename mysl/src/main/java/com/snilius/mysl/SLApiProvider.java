@@ -53,6 +53,7 @@ public class SLApiProvider{
                 .noCache()
                 .setHeader("User-Agent", USER_AGENT)
                 .setHeader("Referer", "https://sl.se/sv/mitt-sl/inloggning/")
+                .setHeader("Content-Type", "application/json;charset=UTF-8")
                 .setJsonObjectBody(json)
                 .group(requestGroup)
                 .asJsonObject()
