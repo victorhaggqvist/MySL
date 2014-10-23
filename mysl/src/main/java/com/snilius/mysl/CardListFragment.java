@@ -133,7 +133,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         initWasRefresh = false;
         if (gs.getmShoppingCart() != null) {
-            travelCardsList = gs.getmShoppingCart().getAsJsonArray("TravelCards");
+            travelCardsList = gs.getmShoppingCart().getAsJsonArray("UserTravelCards");
             cardBarebones = gson.fromJson(travelCardsList, new TypeToken<ArrayList<CardBarebone>>(){}.getType());
             populateList();
         }else {
