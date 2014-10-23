@@ -41,6 +41,7 @@ import java.util.concurrent.TimeoutException;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.view.CardListView;
+import timber.log.Timber;
 
 
 /**
@@ -129,12 +130,14 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
      * Initial fragment setup
      */
     private void setup() {
+        Timber.i("setup");
         JsonArray travelCardsList;
 
         initWasRefresh = false;
         if (gs.getmShoppingCart() != null) {
             travelCardsList = gs.getmShoppingCart().getAsJsonArray("UserTravelCards");
             cardBarebones = gson.fromJson(travelCardsList, new TypeToken<ArrayList<CardBarebone>>(){}.getType());
+            Timber.d(cardBarebones.size()+" cards");
             populateList();
         }else {
             refreshData();
@@ -146,6 +149,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
      * Get new data from sl
      */
     private void refreshData() {
+        Timber.i("refreshing");
         mSwipeRefreshLayout.setRefreshing(true);
         if (null == sl)
             sl = new SLApiProvider(getActivity());
@@ -163,6 +167,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         if (null != cardBarebones){
             for (final CardBarebone bbc : cardBarebones){
+                Timber.i("adding card to queue");
                 AccessCard card = new AccessCard(getActivity(),bbc.getName(), bbc.getSerial());
 //                if (bbc.getPassengerTypeStringId() != -1)
 //                    card.setPassengerType(getString(bbc.getPassengerTypeStringId()));
@@ -203,6 +208,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
      * Process the queue of details reqests
      */
     private void processCardQueue() {
+        Timber.i("processing queue");
         if (null == cardBarebones)
             return;
         cardsFetched = 0;
