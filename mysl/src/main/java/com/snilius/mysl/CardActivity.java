@@ -109,7 +109,7 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
             finish();
 
         JsonObject userInfo = gs.getmShoppingCart();
-        JsonArray travelCards = userInfo.getAsJsonArray("TravelCards");
+        JsonArray travelCards = userInfo.getAsJsonArray("UserTravelCards");
 
         JsonObject foundCard = null;
         for (int i = 0; i < travelCards.size(); i++)
