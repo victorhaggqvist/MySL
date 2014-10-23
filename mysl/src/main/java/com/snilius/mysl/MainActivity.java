@@ -22,6 +22,7 @@ import com.google.gson.JsonSyntaxException;
 import com.koushikdutta.ion.Ion;
 import com.snilius.mysl.util.Helper;
 
+import io.fabric.sdk.android.Fabric;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -51,7 +52,10 @@ public class MainActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Crashlytics.start(this);
+
+        if (!BuildConfig.DEBUG)
+            Fabric.with(this, new Crashlytics());
+
         setContentView(R.layout.activity_main);
 
         PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);

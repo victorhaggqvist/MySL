@@ -3,20 +3,20 @@ import java.text.SimpleDateFormat
 buildscript {
     repositories {
         mavenCentral()
-        maven { url 'http://download.crashlytics.com/maven' }
+        maven { url 'https://maven.fabric.io/repo' }
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:0.12.+'
-        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'crashlytics'
+apply plugin: 'io.fabric'
 
 repositories {
     mavenCentral()
-    maven { url 'http://download.crashlytics.com/maven' }
+    maven { url 'https://maven.fabric.io/repo' }
 }
 
 
@@ -63,10 +63,12 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.koushikdutta.ion:ion:1.3.7'
     compile 'com.github.gabrielemariotti.cards:library:1.8.+'
-    compile 'com.crashlytics.android:crashlytics:1.+'
 //    compile 'com.google.android.gms:play-services:5.2.08'
     compile 'com.google.android.gms:play-services:5.0.89'
     compile 'com.jakewharton.timber:timber:2.4.+'
+    compile('com.crashlytics.sdk.android:crashlytics:2.0.0@aar') {
+        transitive = true;
+    }
 }
 
 def props = new Properties()
