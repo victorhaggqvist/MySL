@@ -53,7 +53,6 @@ import timber.log.Timber;
  */
 public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    public static final String TAG = "CardListFragment";
     private static final String NUMBER_OF_CRADS = "number_of_cards";
 
 //    private OnFragmentInteractionListener mListener;
@@ -240,7 +239,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
             cardsFetched++;
         }
-        Log.i(TAG, "Cards loaded");
+        Timber.i("Cards loaded");
     }
 
     /**
@@ -287,7 +286,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         if (++detailsApplyed == cardBarebones.size()) {
             mSwipeRefreshLayout.setRefreshing(false);
-            Log.i(TAG, "All details applyed");
+            Timber.i("All details applyed");
             if (mDoRefresh && !initWasRefresh) {
                 mDoRefresh = false;
                 refreshData();
@@ -375,20 +374,20 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
         public void onCompleted(Exception e, Response<JsonObject> result) {
             if (null == result) {
                 if (e instanceof TimeoutException) {
-                    Log.w(TAG, "Login, Connection Timeout");
+                    Timber.w("Login, Connection Timeout");
                     mSwipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getActivity(), getString(R.string.error_connectivity), Toast.LENGTH_LONG).show();
                 }else
-                    Log.i(TAG, "Login Canceled");
+                    Timber.i("Login Canceled");
             }else if (result.getHeaders().getResponseCode() == 200){
-                Log.i(TAG, "Login successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                Timber.i("Login successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
 
                 if (justLogin)
                     processCardQueue();
                 else
                     populateList();
             }else {
-                Log.w(TAG, "Login failed: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                Timber.w("Login failed: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
             }
         }
     }
@@ -411,14 +410,14 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
         public void onCompleted(Exception e, Response<JsonObject> result) {
             if (null == result) {
                 if (e instanceof TimeoutException) {
-                    Log.i(TAG, "GetTravelCardDetails, Connection Timeout");
+                    Timber.i("GetTravelCardDetails, Connection Timeout");
                     mSwipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getActivity(), getString(R.string.error_connectivity), Toast.LENGTH_LONG).show();
                 }else
-                    Log.i(TAG, "GetTravelCardDetails Canceled");
+                    Timber.i("GetTravelCardDetails Canceled");
                 mSwipeRefreshLayout.setRefreshing(false);
             } else if (result.getHeaders().getResponseCode() == 200){
-                Log.d(TAG, "GetTravelCardDetails successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                Timber.d("GetTravelCardDetails successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
 
                 if (null == result.getResult()) // if request was likly killed
                     return;
@@ -431,7 +430,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }
                 applyCardDetail(mCard, data);
             }else{
-                Log.e(TAG, "Failed to get details for card: " + getCardId());
+                Timber.e("Failed to get details for card: " + getCardId());
             }
 
         }
