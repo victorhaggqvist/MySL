@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
@@ -53,6 +54,7 @@ import timber.log.Timber;
 public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = "CardListFragment";
+    private static final String NUMBER_OF_CRADS = "number_of_cards";
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -139,6 +141,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
             cardBarebones = gson.fromJson(travelCardsList,
                     new TypeToken<ArrayList<CardBarebone>>(){}.getType());
             Timber.d(cardBarebones.size()+" cards");
+            Crashlytics.setInt(NUMBER_OF_CRADS, cardBarebones.size());
             populateList();
         }else {
             refreshData();
