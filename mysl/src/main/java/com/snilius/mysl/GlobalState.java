@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
@@ -37,11 +38,10 @@ public class GlobalState extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG)
             Timber.plant(new Timber.DebugTree());
-        } else {
+        else
             Timber.plant(new CrashReportingTree());
-        }
 
         reloadLocaleForApplication();
         mTracker = setupTracker();
@@ -141,21 +141,24 @@ public class GlobalState extends Application{
 
     private static class CrashReportingTree extends Timber.HollowTree {
         @Override public void i(String message, Object... args) {
-            // TODO e.g., Crashlytics.log(String.format(message, args));
+            log(message, args);
         }
 
         @Override public void i(Throwable t, String message, Object... args) {
-            i(message, args); // Just add to the log.
+            log(message, args);
         }
 
         @Override public void e(String message, Object... args) {
-            i("ERROR: " + message, args); // Just add to the log.
+            log("ERROR: " + message, args);
         }
 
         @Override public void e(Throwable t, String message, Object... args) {
-            e(message, args);
+            log(message, args);
+            Crashlytics.logException(t);
+        }
 
-            // TODO e.g., Crashlytics.logException(t);
+        private void log(String msg, Object... args){
+            Crashlytics.log(String.format(msg, args));
         }
     }
 }
