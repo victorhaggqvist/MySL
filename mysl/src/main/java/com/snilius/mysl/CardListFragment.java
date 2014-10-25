@@ -136,7 +136,8 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
         initWasRefresh = false;
         if (gs.getmShoppingCart() != null) {
             travelCardsList = gs.getmShoppingCart().getAsJsonArray("UserTravelCards");
-            cardBarebones = gson.fromJson(travelCardsList, new TypeToken<ArrayList<CardBarebone>>(){}.getType());
+            cardBarebones = gson.fromJson(travelCardsList,
+                    new TypeToken<ArrayList<CardBarebone>>(){}.getType());
             Timber.d(cardBarebones.size()+" cards");
             populateList();
         }else {
