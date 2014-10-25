@@ -1,21 +1,12 @@
 package com.snilius.mysl;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
 import com.koushikdutta.ion.cookie.CookieMiddleware;
-
-import org.apache.http.NameValuePair;
-
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by victor on 7/19/14.
