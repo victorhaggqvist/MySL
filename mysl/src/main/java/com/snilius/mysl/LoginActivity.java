@@ -43,7 +43,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private ProgressDialog mProgressDialog;
     private SLApiProvider sl;
     private Tracker mTracker;
-//    private FrameLayout decorView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
