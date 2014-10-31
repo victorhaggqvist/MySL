@@ -26,12 +26,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-
-    public static final String TAG = "MainActivity";
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -75,7 +74,7 @@ public class MainActivity extends ActionBarActivity
         mTracker = ((GlobalState) getApplication()).getTracker();
 
         if (password.length()<1) {
-            Log.d(TAG, "Login start flow");
+            Timber.d("Login start flow");
             startActivityForResult(new Intent(this, LoginActivity.class), LoginActivity.REQUEST_CODE);
         }else {
             String fullName = preferences.getString(getString(R.string.pref_user_fullname),"");
@@ -97,7 +96,7 @@ public class MainActivity extends ActionBarActivity
             }
 
             mTracker.set("&uid", uid);
-            Log.d(TAG, "Regular start flow");
+            Timber.d("Regular start flow");
             loadUserInfoFile();
         }
     }
@@ -111,7 +110,7 @@ public class MainActivity extends ActionBarActivity
         }
 
         if (userinfoFile.length()>0) {
-            Log.i(TAG, "Userinfo file loaded");
+            Timber.i("Userinfo file loaded");
 
             try {
                 JsonObject userInfo = new JsonParser().parse(userinfoFile).getAsJsonObject();
@@ -158,7 +157,7 @@ public class MainActivity extends ActionBarActivity
         deleteFile(getString(R.string.file_shoppingcart));
         deleteFile(getString(R.string.file_orders));
         PreferenceManager.getDefaultSharedPreferences(this).edit().clear().commit();
-        Log.i(TAG, "User signout, everything cleanup");
+        Timber.i("User signout, everything cleanup");
         if (null == mTracker)
             mTracker = ((GlobalState) getApplication()).getTracker();
         mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("User Sign Out").build());
