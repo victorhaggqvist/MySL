@@ -186,12 +186,12 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                 editor.putString(getString(R.string.pref_user_email), userSession.get("Email").getAsString());
                 editor.putString(getString(R.string.pref_user_username), username.getText().toString());
                 editor.putString(getString(R.string.pref_user_password), password.getText().toString());
-                editor.commit();
+                editor.apply();
 
                 try {
                     MessageDigest digest = MessageDigest.getInstance("SHA-256");
                     byte[] hash = digest.digest(userSession.get("Email").getAsString().getBytes("UTF-8"));
-                    editor.putString(getString(R.string.pref_user_uid), hash.toString()).commit();
+                    editor.putString(getString(R.string.pref_user_uid), hash.toString()).apply();
                     mTracker.set("&uid", hash.toString());
                 } catch (NoSuchAlgorithmException e1) {
                     e1.printStackTrace();
