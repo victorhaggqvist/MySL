@@ -1,34 +1,22 @@
 package com.snilius.mysl;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
-import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
-import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-
-import java.util.List;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -48,26 +36,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      * as a master/detail two-pane view on tablets. When true, a single pane is
      * shown on tablets.
      */
-    private static final boolean ALWAYS_SIMPLE_PREFS = false;
+
     private int fool = 0;
     private Tracker mTracker;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupActionBar();
-        mTracker = ((GlobalState) getApplication()).getTracker();
-    }
 
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        mTracker = ((GlobalState) getApplication()).getTracker();
+        setupSimplePreferencesScreen();
     }
 
     @Override
@@ -89,12 +67,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
 
-        setupSimplePreferencesScreen();
-    }
+//    @Override
+//    protected void onPostCreate(Bundle savedInstanceState) {
+//        super.onPostCreate(savedInstanceState);
+//
+//
+//    }
 
     /**
      * Shows the simplified settings UI if the device configuration if the
@@ -102,10 +81,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
      * shown.
      */
     private void setupSimplePreferencesScreen() {
-        if (!isSimplePreferences(this)) {
-            return;
-        }
-
         addPreferencesFromResource(R.xml.prefs);
 
         // Bind the summaries of EditText/List/Dialog/Ringtone preferences to
@@ -116,21 +91,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     }
 
     private void loadVersioninfo(){
-        PackageInfo info = null;
-        try {
-            info = getPackageManager().getPackageInfo("com.snilius.mysl",0);
-        } catch (PackageManager.NameNotFoundException e) { }
-
-        if (info != null){
-            Preference about_version = findPreference("about_version");
-            about_version.setSummary("Version " + info.versionName + " (" + info.versionCode + ")");
-        }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean onIsMultiPane() {
-        return isXLargeTablet(this) && !isSimplePreferences(this);
+        Preference about_version = findPreference("about_version");
+        about_version.setSummary("Version " + GlobalState.APP_VERSION);
     }
 
     /**
@@ -140,29 +102,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     private static boolean isXLargeTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
         & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
-    }
-
-    /**
-     * Determines whether the simplified settings UI should be shown. This is
-     * true if this is forced via {@link #ALWAYS_SIMPLE_PREFS}, or the device
-     * doesn't have newer APIs like {@link PreferenceFragment}, or the device
-     * doesn't have an extra-large screen. In these cases, a single-pane
-     * "simplified" settings UI should be shown.
-     */
-    private static boolean isSimplePreferences(Context context) {
-        return true; // one page settings for every one! Atleast better than FC
-//        return ALWAYS_SIMPLE_PREFS
-//                || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
-//                || !isXLargeTablet(context);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void onBuildHeaders(List<Header> target) {
-        if (!isSimplePreferences(this)) {
-            loadHeadersFromResource(R.xml.pref_headers, target);
-        }
     }
 
     @Override
@@ -245,11 +184,15 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         if (key.equals("lang")){
             ((GlobalState) getApplication()).reloadLocaleForApplication();
             String lang = sharedPreferences.getString(getString(R.string.pref_lang),"");
-            mTracker.send(new HitBuilders.EventBuilder().setCategory("Settings").setAction("Language").setLabel(lang).build());
-            Toast.makeText(this,getString(R.string.lang_change_app_restart), Toast.LENGTH_LONG).show();
+            mTracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("Settings")
+                    .setAction("Language").setLabel(lang).build());
+            Toast.makeText(this, getString(R.string.lang_change_app_restart), Toast.LENGTH_LONG).show();
         }else {
             String refreshPref = sharedPreferences.getBoolean(getString(R.string.pref_refresh_on_start), true)?"1":"0";
-            mTracker.send(new HitBuilders.EventBuilder().setCategory("Settings").setAction("Refresh on start").setLabel(refreshPref).build());
+            mTracker.send(new HitBuilders.EventBuilder()
+                    .setCategory("Settings")
+                    .setAction("Refresh on start").setLabel(refreshPref).build());
         }
     }
 
@@ -274,45 +217,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                         .getString(preference.getKey(), ""));
     }
 
-    /**
-     * This fragment shows general preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class GeneralPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_general);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference("lang"));
-        }
-    }
-
-    /**
-     * This fragment shows notification preferences only. It is used when the
-     * activity is showing a two-pane settings UI.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static class AboutPreferenceFragment extends PreferenceFragment {
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.pref_about);
-
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-        }
-    }
-
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         // Set up a listener whenever a key changes
         getPreferenceScreen().getSharedPreferences()
@@ -320,16 +226,16 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         // Unregister the listener whenever a key changes
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        NavUtils.navigateUpFromSameTask(this);
-    }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        NavUtils.navigateUpFromSameTask(this);
+//    }
 }

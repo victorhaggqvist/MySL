@@ -90,7 +90,6 @@
     <string name="send_feedback_email_emailaddress" translatable="false">android@snilius.com</string>
     <string name="send_feedback_email_title">My SL</string>
     <string name="title_activity_about">About</string>
-    <!--<string name="hello_world">Hello world!</string>-->
     <string name="send_email">Send Email</string>
     <string name="purse">SL Access Credit</string>
     <string name="list_card_purse_title" formatted="false">SL Access Credit: %skr</string>
@@ -100,10 +99,12 @@
     <string name="inactive">(Inactive)</string>
     <string name="account_created">Account Created</string>
     <string name="about" translatable="false">Copyright 2014 Snilius. \n
-    \nThis application makes use of AB Storstockholms Lokaltrafik unofficial API used on https://sl.se. All communication is done through a SSL/TSL connection.\n
+    \nThis application makes use of AB Storstockholms Lokaltrafik unofficial API used on https://sl.se. All communication is done through a SSL/TLS connection.\n
     \nCard Library by Gabriele Mariotti under Apache License, Version 2.0, https://github.com/gabrielemariotti/cardslib
     \nIon by Koushik Dutta under Apache License, Version 2.0, https://github.com/koush/ion
     \nGson by Google under Apache License, Version 2.0, https://code.google.com/p/google-gson
+    \nMaterial Design Icons by Google under CC by SA 4.0, https://github.com/google/material-design-icons
+    \nTimber by Jake Wharton under Apache License, Version 2.0, https://github.com/JakeWharton/timber
     \n\nThis application, My SL, is distributed under the GPLv3 license. View the source and contribute at https://github.com/victorhaggqvist/MySL
     </string>
     <string name="login_fail">Login failed</string>
@@ -113,5 +114,6 @@
     <string name="notifications_not_eligible_title">No tickets eligible</string>
     <string name="notifications_not_eligible_msg">There is no tickets eligible for notifications at the moment. Only period tickets are eligible for notifications.</string>
     <string name="login_load_dialog">Signing-in to SL</string>
+    <string name="create_account_creating">Creating Account</string>
 
 </resources>

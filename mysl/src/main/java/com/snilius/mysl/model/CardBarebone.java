@@ -1,8 +1,5 @@
 package com.snilius.mysl.model;
 
-import android.app.Activity;
-import android.content.Context;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.snilius.mysl.R;

@@ -21,15 +21,15 @@ repositories {
 
 
 android {
-    compileSdkVersion 20
-    buildToolsVersion "20.0.0"
+    compileSdkVersion 21
+    buildToolsVersion "21.0.2"
 
     defaultConfig {
         applicationId "com.snilius.mysl"
         minSdkVersion 14
-        targetSdkVersion 20
-        versionCode 11
-        versionName "0.4.2" // remember to bump ga version too
+        targetSdkVersion 21
+        versionCode 12
+        versionName "0.5.0" // remember to bump ga version too
     }
 
     signingConfigs {
@@ -57,14 +57,14 @@ android {
 }
 
 dependencies {
-//    compile fileTree(dir: 'libs', include: ['*.jar'])
-//    // You must install or update the Support Repository through the SDK manager to use this dependency.
     compile 'com.android.support:support-v4:21.0.0'
+    compile "com.android.support:appcompat-v7:21.0.+"
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.koushikdutta.ion:ion:1.3.7'
     compile 'com.github.gabrielemariotti.cards:library:1.8.+'
     compile 'com.google.android.gms:play-services:6.1.11'
     compile 'com.jakewharton.timber:timber:2.4.+'
+
     compile('com.crashlytics.sdk.android:crashlytics:2.0.0@aar') {
         transitive = true;
     }

@@ -22,7 +22,7 @@ import timber.log.Timber;
  * @since 7/20/14
  */
 public class GlobalState extends Application{
-    public static String APP_VERSION = BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")";
+    public static String APP_VERSION = BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + (BuildConfig.DEBUG?"-dev":"") + ")";
 
     private JsonObject mShoppingCart;
 
