@@ -1,15 +1,14 @@
 package com.snilius.mysl;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,7 +28,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class LoginActivity extends Activity implements View.OnClickListener {
+public class LoginActivity extends ActionBarActivity implements View.OnClickListener {
 
     public static final String TAG = "LoginActivity";
     public static final int REQUEST_CODE = 1;
@@ -47,9 +46,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_login);
-        setTitle(getString(R.string.title_activity_login));
+        getSupportActionBar().hide();
 
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
