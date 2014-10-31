@@ -1,15 +1,13 @@
 package com.snilius.mysl;
 
-import android.app.Activity;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,7 +41,7 @@ import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.view.CardListView;
 
 
-public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener{
+public class CardActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener{
 
     public static final String EXTRA_CARD_SERIAL = "CardActivity.CardSerial";
 
@@ -100,6 +98,7 @@ public class CardActivity extends Activity implements SwipeRefreshLayout.OnRefre
         setup();
 
         mTracker = ((GlobalState) getApplication()).getTracker();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setup() {

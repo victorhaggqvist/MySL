@@ -1,7 +1,6 @@
 package com.snilius.mysl.model;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
