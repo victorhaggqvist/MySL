@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,9 +23,10 @@ import com.snilius.mysl.util.TextValidator;
 
 import java.util.concurrent.TimeoutException;
 
+import timber.log.Timber;
 
-public class AddCardActivity extends Activity {
-    public static final String TAG = "AddCardActivity";
+
+public class AddCardActivity extends ActionBarActivity {
 
     private TextView num1, num2, name;
     private boolean allValid;
@@ -37,6 +39,7 @@ public class AddCardActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_card);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         num1 = (TextView) findViewById(R.id.add_cardnum1);
         num1.addTextChangedListener(new TextValidator(num1) {
@@ -172,16 +175,16 @@ public class AddCardActivity extends Activity {
         public void onCompleted(Exception e, Response<JsonObject> result) {
             if (null == result) {
                 if (e instanceof TimeoutException) {
-                    Log.i(TAG, "Login, Connection Timeout");
+                    Timber.i("Login, Connection Timeout");
                     Toast.makeText(getApplicationContext(), getString(R.string.error_connectivity), Toast.LENGTH_LONG).show();
                 }else
-                    Log.i(TAG, "Login Canceled");
+                    Timber.i("Login Canceled");
             }else if (result.getHeaders().getResponseCode() == 200){
-                Log.d(TAG, "Login successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                Timber.d("Login successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
                 if (postBody != null)
                     sl.registerTravelCard(getApplicationContext(), new RegisterTravelCardCallback(), postBody);
             }else {
-                Log.d(TAG, "Login failed: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                Timber.d("Login failed: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
             }
 
         }
@@ -191,10 +194,10 @@ public class AddCardActivity extends Activity {
             public void onCompleted(Exception e, Response<JsonObject> result) {
                 if (null == result) {
                     if (e instanceof TimeoutException) {
-                        Log.i(TAG, "RegisterTravelCard, Connection Timeout");
+                        Timber.i("RegisterTravelCard, Connection Timeout");
                         Toast.makeText(getApplicationContext(), getString(R.string.error_connectivity), Toast.LENGTH_LONG).show();
                     }else
-                        Log.i(TAG, "RegisterTravelCard Canceled");
+                        Timber.i("RegisterTravelCard Canceled");
                 }else if (result.getHeaders().getResponseCode() != 200) {
                     JsonObject jsonResult = result.getResult();
                     if (jsonResult.get("status").getAsString().equals("error")){
@@ -202,10 +205,10 @@ public class AddCardActivity extends Activity {
                         failPopup(msg);
                     }
                 }else if (result.getHeaders().getResponseCode() == 200){
-                    Log.d(TAG, "RegisterTravelCard successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                    Timber.d("RegisterTravelCard successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
                     Toast.makeText(getApplicationContext(), getString(R.string.card_registered_success), Toast.LENGTH_LONG).show();
                 }else {
-                    Log.d(TAG, "RegisterTravelCard failed: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                    Timber.d("RegisterTravelCard failed: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
                 }
                 progressBar.setVisibility(View.GONE);
             }
