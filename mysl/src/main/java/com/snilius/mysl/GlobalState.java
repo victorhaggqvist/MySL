@@ -56,7 +56,7 @@ public class GlobalState extends Application{
 
             Locale aDefault = Locale.getDefault();
             String defLang = aDefault.getLanguage();
-            Timber.i("Default locale " + defLang);
+//            Timber.i("Default locale " + defLang);
 
             if ("sv".equals(defLang) || "en".equals(defLang))
                 sharedPreferences.edit()
@@ -66,7 +66,7 @@ public class GlobalState extends Application{
                         .putString(getString(R.string.pref_lang),"en").apply();
 
         } else {
-            Timber.i("Preferred language: " + language);
+//            Timber.i("Preferred language: " + language);
 
             Locale locale = null;
 
@@ -77,7 +77,7 @@ public class GlobalState extends Application{
             }
 
             if (locale != null) {
-                Timber.d("setting locale " + locale);
+//                Timber.d("setting locale " + locale);
                 Resources res = getResources();
                 DisplayMetrics dm = res.getDisplayMetrics();
                 Configuration conf = res.getConfiguration();
