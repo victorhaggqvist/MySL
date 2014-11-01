@@ -2,10 +2,11 @@ package com.snilius.mysl;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
@@ -39,6 +41,7 @@ import java.util.concurrent.TimeoutException;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.view.CardListView;
+import timber.log.Timber;
 
 
 /**
@@ -49,7 +52,7 @@ import it.gmariotti.cardslib.library.view.CardListView;
  */
 public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    public static final String TAG = "CardListFragment";
+    private static final String NUMBER_OF_CRADS = "number_of_cards";
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -67,6 +70,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
     private SLApiProvider sl;
     private GlobalState gs;
     private boolean initWasRefresh;
+    private SharedPreferences pref;
 
     /**
      * Use this factory method to create a new instance of
@@ -99,6 +103,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
         Tracker t = ((GlobalState) getActivity().getApplication()).getTracker();
         t.setScreenName("CardListView");
         t.send(new HitBuilders.AppViewBuilder().build());
+        pref = PreferenceManager.getDefaultSharedPreferences(getActivity());
     }
 
     @Override
@@ -125,12 +130,16 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
      * Initial fragment setup
      */
     private void setup() {
+        Timber.i("setup");
         JsonArray travelCardsList;
 
         initWasRefresh = false;
         if (gs.getmShoppingCart() != null) {
-            travelCardsList = gs.getmShoppingCart().getAsJsonArray("TravelCards");
-            cardBarebones = gson.fromJson(travelCardsList, new TypeToken<ArrayList<CardBarebone>>(){}.getType());
+            travelCardsList = gs.getmShoppingCart().getAsJsonArray("UserTravelCards");
+            cardBarebones = gson.fromJson(travelCardsList,
+                    new TypeToken<ArrayList<CardBarebone>>(){}.getType());
+            Timber.d(cardBarebones.size()+" cards");
+            Crashlytics.setInt(NUMBER_OF_CRADS, cardBarebones.size());
             populateList();
         }else {
             refreshData();
@@ -142,6 +151,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
      * Get new data from sl
      */
     private void refreshData() {
+        Timber.i("refreshing");
         mSwipeRefreshLayout.setRefreshing(true);
         if (null == sl)
             sl = new SLApiProvider(getActivity());
@@ -159,6 +169,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         if (null != cardBarebones){
             for (final CardBarebone bbc : cardBarebones){
+                Timber.i("adding card to queue");
                 AccessCard card = new AccessCard(getActivity(),bbc.getName(), bbc.getSerial());
 //                if (bbc.getPassengerTypeStringId() != -1)
 //                    card.setPassengerType(getString(bbc.getPassengerTypeStringId()));
@@ -167,6 +178,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     card.setPurseEnabled(bbc.isPurseEnabled());
                     card.setPurseSubtitle(getString(bbc.getPassengerTypeStringId()), bbc.getCouponCount());
                     card.setPurseValue(Integer.toString(bbc.getPurseValue()));
+                    card.setInfoLoaded(true);
                 }
 
                 card.setOnClickListener(new Card.OnCardClickListener() {
@@ -198,6 +210,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
      * Process the queue of details reqests
      */
     private void processCardQueue() {
+        Timber.i("processing queue");
         if (null == cardBarebones)
             return;
         cardsFetched = 0;
@@ -225,7 +238,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
             cardsFetched++;
         }
-        Log.i(TAG, "Cards loaded");
+        Timber.i("Cards loaded");
     }
 
     /**
@@ -235,6 +248,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
      * @param data
      */
     private void applyCardDetail(AccessCard listCard, JsonObject data) {
+        listCard.setInfoLoaded(true);
         if (DetailCardHelper.with(data).hasPurse())
             listCard.setPurseValue(DetailCardHelper.with(data).getPurseValueExt());
 
@@ -253,8 +267,14 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 productString += cp.getProductType() + "\n";
                 if (null == cp.getEndDate())
                     productString += gs.getString(R.string.inactive) + "\n";
-                else
-                    productString += cp.getEndDateExt() + "\n";
+                else {
+                    String lang = pref.getString(getString(R.string.pref_lang),"en");
+                    String date = cp.getEndDate();
+
+                    String formatted = Helper.localizeAndFormatDate(date, lang);
+
+                    productString += formatted + "\n";
+                }
             }
             productString = productString.substring(0, productString.length() - 1);
             listCard.setCardProducts(productString);
@@ -265,7 +285,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         if (++detailsApplyed == cardBarebones.size()) {
             mSwipeRefreshLayout.setRefreshing(false);
-            Log.i(TAG, "All details applyed");
+            Timber.i("All details applyed");
             if (mDoRefresh && !initWasRefresh) {
                 mDoRefresh = false;
                 refreshData();
@@ -353,20 +373,20 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
         public void onCompleted(Exception e, Response<JsonObject> result) {
             if (null == result) {
                 if (e instanceof TimeoutException) {
-                    Log.w(TAG, "Login, Connection Timeout");
+                    Timber.w("Login, Connection Timeout");
                     mSwipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getActivity(), getString(R.string.error_connectivity), Toast.LENGTH_LONG).show();
                 }else
-                    Log.i(TAG, "Login Canceled");
+                    Timber.i("Login Canceled");
             }else if (result.getHeaders().getResponseCode() == 200){
-                Log.i(TAG, "Login successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                Timber.i("Login successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
 
                 if (justLogin)
                     processCardQueue();
                 else
                     populateList();
             }else {
-                Log.w(TAG, "Login failed: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                Timber.w("Login failed: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
             }
         }
     }
@@ -389,14 +409,18 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
         public void onCompleted(Exception e, Response<JsonObject> result) {
             if (null == result) {
                 if (e instanceof TimeoutException) {
-                    Log.i(TAG, "GetTravelCardDetails, Connection Timeout");
+                    Timber.i("GetTravelCardDetails, Connection Timeout");
                     mSwipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getActivity(), getString(R.string.error_connectivity), Toast.LENGTH_LONG).show();
                 }else
-                    Log.i(TAG, "GetTravelCardDetails Canceled");
+                    Timber.i("GetTravelCardDetails Canceled");
                 mSwipeRefreshLayout.setRefreshing(false);
             } else if (result.getHeaders().getResponseCode() == 200){
-                Log.d(TAG, "GetTravelCardDetails successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                Timber.d("GetTravelCardDetails successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+
+                if (null == result.getResult()) // if request was likly killed
+                    return;
+
                 JsonObject data = result.getResult().getAsJsonObject("data");
                 try {
                     Helper.saveToFile(getActivity(), getFileName(), data.toString());
@@ -405,7 +429,7 @@ public class CardListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }
                 applyCardDetail(mCard, data);
             }else{
-                Log.e(TAG, "Failed to get details for card: " + getCardId());
+                Timber.e("Failed to get details for card: " + getCardId());
             }
 
         }

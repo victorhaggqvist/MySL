@@ -6,8 +6,8 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
@@ -15,13 +15,14 @@ import com.google.gson.JsonObject;
 
 import java.util.Locale;
 
+import timber.log.Timber;
+
 /**
- * Created by victor on 7/20/14.
+ * @author Victor Häggqvist
+ * @since 7/20/14
  */
 public class GlobalState extends Application{
-
-    public static final String TAG = "GSMySL";
-    public static String APP_VERSION = BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")";
+    public static String APP_VERSION = BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + (BuildConfig.DEBUG?"-dev":"") + ")";
 
     private JsonObject mShoppingCart;
 
@@ -37,7 +38,13 @@ public class GlobalState extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        if (BuildConfig.DEBUG)
+            Timber.plant(new Timber.DebugTree());
+        else
+            Timber.plant(new CrashReportingTree());
+
         reloadLocaleForApplication();
+        mTracker = setupTracker();
     }
 
     public void reloadLocaleForApplication() {
@@ -45,26 +52,39 @@ public class GlobalState extends Application{
                 .getDefaultSharedPreferences(getApplicationContext());
 
         String language = sharedPreferences.getString(getString(R.string.pref_lang), "system");
-        Log.d(TAG, "Preferred language: " + language);
+        if (language.equals("system")) {
 
-        Locale locale = null;
-        if ("sv".equals(language)) {
-            locale = new Locale("sv", "SE");
-        } else if ("es".equals(language)) {
-            locale = new Locale("es", "ES");
-        } else if ("en".equals(language)) {
-            locale = Locale.ENGLISH;
-        }
+            Locale aDefault = Locale.getDefault();
+            String defLang = aDefault.getLanguage();
+//            Timber.i("Default locale " + defLang);
 
-        if (locale != null) {
-            Log.d(TAG, "setting locale " + locale);
-            Resources res = getResources();
-            DisplayMetrics dm = res.getDisplayMetrics();
-            Configuration conf = res.getConfiguration();
-            conf.locale = locale;
-            res.updateConfiguration(conf, dm);
+            if ("sv".equals(defLang) || "en".equals(defLang))
+                sharedPreferences.edit()
+                    .putString(getString(R.string.pref_lang),defLang).apply();
+            else
+                sharedPreferences.edit()
+                        .putString(getString(R.string.pref_lang),"en").apply();
+
+        } else {
+//            Timber.i("Preferred language: " + language);
+
+            Locale locale = null;
+
+            if ("sv".equals(language)) {
+                locale = new Locale("sv", "SE");
+            } else if ("en".equals(language)) {
+                locale = Locale.ENGLISH;
+            }
+
+            if (locale != null) {
+//                Timber.d("setting locale " + locale);
+                Resources res = getResources();
+                DisplayMetrics dm = res.getDisplayMetrics();
+                Configuration conf = res.getConfiguration();
+                conf.locale = locale;
+                res.updateConfiguration(conf, dm);
+            }
         }
-        mTracker = setupTracker();
     }
 
     public JsonObject getmShoppingCart() {
@@ -128,6 +148,31 @@ public class GlobalState extends Application{
     }
 
     public synchronized Tracker getTracker() {
+        if (mTracker == null)
+            mTracker = setupTracker();
         return mTracker;
+    }
+
+    private static class CrashReportingTree extends Timber.HollowTree {
+        @Override public void i(String message, Object... args) {
+            log(message, args);
+        }
+
+        @Override public void i(Throwable t, String message, Object... args) {
+            log(message, args);
+        }
+
+        @Override public void e(String message, Object... args) {
+            log("ERROR: " + message, args);
+        }
+
+        @Override public void e(Throwable t, String message, Object... args) {
+            log(message, args);
+            Crashlytics.logException(t);
+        }
+
+        private void log(String msg, Object... args){
+            Crashlytics.log(String.format(msg, args));
+        }
     }
 }

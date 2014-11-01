@@ -1,19 +1,15 @@
 package com.snilius.mysl;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,8 +22,10 @@ import com.snilius.mysl.util.TextValidator;
 
 import java.util.concurrent.TimeoutException;
 
+import timber.log.Timber;
 
-public class CreateAccountActivity extends Activity {
+
+public class CreateAccountActivity extends ActionBarActivity {
 
     private boolean allValid = false;
 
@@ -41,30 +39,12 @@ public class CreateAccountActivity extends Activity {
     private CheckBox terms;
     private Tracker mTracker;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
-        final ButteryProgressBar progressBar = new ButteryProgressBar(this);
-        progressBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 24));
-
-//        progressBar.setProgress(65);
-//        progressBar.setIndeterminate(true);
-        final FrameLayout decorView = (FrameLayout) getWindow().getDecorView();
-        decorView.addView(progressBar);
-
-        ViewTreeObserver observer = progressBar.getViewTreeObserver();
-        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                View contentView = decorView.findViewById(android.R.id.content);
-                progressBar.setY(contentView.getY() - 8);
-
-                ViewTreeObserver observer = progressBar.getViewTreeObserver();
-                observer.removeGlobalOnLayoutListener(this);
-            }
-        });
-        progressBar.setVisibility(View.GONE);
 
         username = (TextView) findViewById(R.id.create_username);
         username.addTextChangedListener(new TextValidator(username) {
@@ -153,6 +133,11 @@ public class CreateAccountActivity extends Activity {
         terms = (CheckBox) findViewById(R.id.create_agreeterms);
 
         mTracker = ((GlobalState) getApplication()).getTracker();
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.create_account_creating));
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     private void validText(TextView textView, String msg) {
@@ -199,8 +184,16 @@ public class CreateAccountActivity extends Activity {
             cust.addProperty("first_name", fname.getText().toString());
             cust.addProperty("last_name", lname.getText().toString());
             cust.addProperty("email", email.getText().toString());
-            cust.addProperty("birth_date", ssn.getText().toString().split("-")[0]);
-            cust.addProperty("person_number", ssn.getText().toString().split("-")[1]);
+            String[] ssnSplit = ssn.getText().toString().split("-");
+            if (ssnSplit.length==2) {
+                cust.addProperty("birth_date", ssnSplit[0]);
+                cust.addProperty("person_number", ssnSplit[1]);
+            } else {
+                ssn.setError(getString(R.string.create_err_invalid_ssn));
+                allValid = false;
+                return;
+            }
+
             userAccount.add("private_customer", cust);
 
             json.add("user_account", userAccount);
@@ -209,6 +202,7 @@ public class CreateAccountActivity extends Activity {
             json.addProperty("direct_advertising", false);
 
             SLApiProvider sl = new SLApiProvider(this);
+            progressDialog.show();
             sl.createAccount(this, new CreateAccountCallback(), json);
             mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("Create account").setLabel("Valid submission").build());
         }else {
@@ -233,8 +227,9 @@ public class CreateAccountActivity extends Activity {
     private class CreateAccountCallback implements FutureCallback<Response<JsonObject>> {
         @Override
         public void onCompleted(Exception e, Response<JsonObject> result) {
+            progressDialog.dismiss();
             if (null == result){
-                System.out.println("fail");
+                Timber.e("Create fail");
                 if (e instanceof TimeoutException)
                     Toast.makeText(getApplicationContext(), getString(R.string.error_connectivity), Toast.LENGTH_LONG).show();
                 mTracker.send(new HitBuilders.EventBuilder().setCategory("Network").setAction("Create account").setLabel("Network fail").build());

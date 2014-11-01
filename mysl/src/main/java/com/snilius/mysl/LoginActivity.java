@@ -1,41 +1,34 @@
 package com.snilius.mysl;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Response;
+import com.snilius.mysl.util.HashHelper;
 import com.snilius.mysl.util.LoginDefinitions;
 import com.snilius.mysl.util.TextValidator;
 
 import java.io.FileOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
-public class LoginActivity extends Activity implements View.OnClickListener {
+import timber.log.Timber;
 
-    public static final String TAG = "LoginActivity";
+public class LoginActivity extends ActionBarActivity implements View.OnClickListener {
+
     public static final int REQUEST_CODE = 1;
 
     private Button login, create;
@@ -44,18 +37,15 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private boolean mLoginInprogress = false;
 
     private boolean allValid = false;
-    private ProgressBar progressBar;
+    private ProgressDialog mProgressDialog;
     private SLApiProvider sl;
     private Tracker mTracker;
-//    private FrameLayout decorView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getActionBar().hide();
         setContentView(R.layout.activity_login);
-        setTitle(getString(R.string.title_activity_login));
+        getSupportActionBar().hide();
 
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
@@ -99,10 +89,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             password.setText(ld.getPass());
         }
 
-        progressBar = (ProgressBar) findViewById(R.id.login_progress);
-        progressBar.setIndeterminate(true);
-
         mTracker = ((GlobalState) getApplication()).getTracker();
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage(getString(R.string.login_load_dialog));
+        mProgressDialog.setIndeterminate(true);
     }
 
     @Override
@@ -128,7 +118,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
+        mProgressDialog.show();
         sl = new SLApiProvider(this);
         String user = username.getText().toString();
         String passwd = password.getText().toString();
@@ -142,27 +132,33 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         @Override
         public void onCompleted(Exception e, Response<JsonObject> result) {
             if (e != null) {
-                Log.i(TAG, e.toString());
+                Timber.i(result.getHeaders().getStatusLine());
                 Toast.makeText(getApplication(), getString(R.string.login_fail), Toast.LENGTH_LONG).show();
                 login_error.setText(getString(R.string.error_connectivity));
                 login_error.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
+                mProgressDialog.dismiss();
                 mLoginInprogress = false;
                 mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("SL Connection Issue").build());
                 return;
             }
 
             if (result.getHeaders().getResponseCode() != 200){
-                login_error.setText(getString(R.string.error_login_credentials));
+                if (result.getHeaders().getResponseCode() == 403)
+                    login_error.setText(getString(R.string.error_login_credentials));
+                else
+                    login_error.setText(getString(R.string.error_connectivity));
                 login_error.setVisibility(View.VISIBLE);
-                Log.i(TAG, result.getResult().toString());
-                progressBar.setVisibility(View.GONE);
+
+                mProgressDialog.dismiss();
+                Crashlytics.setString("Login response: ", result.getHeaders().getStatusLine());
+//                Log.i(TAG, result.getResult().toString());
+
                 mLoginInprogress = false;
                 mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("User Sign In Fail").build());
                 return;
             }
 
-            Log.i(TAG, "Auth successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+            Timber.i("Auth successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
             sl.getShoppingCart(getApplication(), new GetShoopingCartCallback());
         }
     }
@@ -175,7 +171,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             JsonObject response = result.getResult();
 //            System.out.println("data: " + response.getAsJsonObject("data"));
             boolean doesSLThinkImAutenticated = response.getAsJsonObject("data").get("UserAutenticated").getAsBoolean();
-            Log.i(TAG, "SL like us: " + doesSLThinkImAutenticated);
+            Timber.i("SL like us: " + doesSLThinkImAutenticated);
 
             if (doesSLThinkImAutenticated){
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getApplication()).edit();
@@ -185,21 +181,15 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 editor.putString(getString(R.string.pref_user_fullname), userSession.get("FullName").getAsString());
                 editor.putString(getString(R.string.pref_user_firstname), userSession.get("FirstName").getAsString());
                 editor.putString(getString(R.string.pref_user_lastname), userSession.get("LastName").getAsString());
-                editor.putString(getString(R.string.pref_user_email), userSession.get("Email").getAsString());
+                String email = userSession.get("Email").getAsString();
+                editor.putString(getString(R.string.pref_user_email), email);
                 editor.putString(getString(R.string.pref_user_username), username.getText().toString());
                 editor.putString(getString(R.string.pref_user_password), password.getText().toString());
-                editor.commit();
+                editor.apply();
 
-                try {
-                    MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                    byte[] hash = digest.digest(userSession.get("Email").getAsString().getBytes("UTF-8"));
-                    editor.putString(getString(R.string.pref_user_uid), hash.toString()).commit();
-                    mTracker.set("&uid", hash.toString());
-                } catch (NoSuchAlgorithmException e1) {
-                    e1.printStackTrace();
-                } catch (UnsupportedEncodingException e1) {
-                    e1.printStackTrace();
-                }
+                String hash = HashHelper.sha256(email);
+                editor.putString(getString(R.string.pref_user_uid), hash).apply();
+                mTracker.set("&uid", hash);
 
                 mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("User Sign In").build());
 
@@ -217,7 +207,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             }
 
 //            System.out.println(response.getAsJsonObject("data").get("UserAutenticated").getAsBoolean());
-            progressBar.setVisibility(View.GONE);
+            mProgressDialog.dismiss();
             mLoginInprogress = false;
         }
     }

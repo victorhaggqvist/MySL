@@ -1,17 +1,15 @@
 package com.snilius.mysl;
 
-import android.app.Activity;
-
-import android.app.ActionBar;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.widget.DrawerLayout;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -19,20 +17,17 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.koushikdutta.ion.Ion;
+import com.snilius.mysl.util.HashHelper;
 import com.snilius.mysl.util.Helper;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
+import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
 
-public class MainActivity extends Activity
+public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
-
-    public static final String TAG = "MainActivity";
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -51,13 +46,16 @@ public class MainActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Crashlytics.start(this);
+
+//        if (!BuildConfig.DEBUG)
+        Fabric.with(this, new Crashlytics());
+
         setContentView(R.layout.activity_main);
 
-        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+        PreferenceManager.setDefaultValues(this, R.xml.prefs, false);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
@@ -73,7 +71,7 @@ public class MainActivity extends Activity
         mTracker = ((GlobalState) getApplication()).getTracker();
 
         if (password.length()<1) {
-            Log.d(TAG, "Login start flow");
+            Timber.d("Login start flow");
             startActivityForResult(new Intent(this, LoginActivity.class), LoginActivity.REQUEST_CODE);
         }else {
             String fullName = preferences.getString(getString(R.string.pref_user_fullname),"");
@@ -82,20 +80,12 @@ public class MainActivity extends Activity
             mNavigationDrawerFragment.setUserIfno(fullName, email);
 
             if (uid.length()<1){
-                try {
-                    MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                    byte[] hash = digest.digest(email.getBytes("UTF-8"));
-                    uid = hash.toString();
-                    preferences.edit().putString(getString(R.string.pref_user_uid), uid).commit();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                uid = HashHelper.sha256(email);
+                preferences.edit().putString(getString(R.string.pref_user_uid), uid).apply();
             }
 
             mTracker.set("&uid", uid);
-            Log.d(TAG, "Regular start flow");
+            Timber.d("Regular start flow");
             loadUserInfoFile();
         }
     }
@@ -109,14 +99,13 @@ public class MainActivity extends Activity
         }
 
         if (userinfoFile.length()>0) {
-            Log.i(TAG, "Userinfo file loaded");
+            Timber.i("Userinfo file loaded");
 
             try {
                 JsonObject userInfo = new JsonParser().parse(userinfoFile).getAsJsonObject();
                 ((GlobalState) getApplication()).setmShoppingCart(userInfo);
             } catch (JsonSyntaxException e) {
-                System.out.println("User info file has broken json");
-//            e.printStackTrace();
+                Timber.i(e, "User info file has broken json");
             }
         }
     }
@@ -132,14 +121,14 @@ public class MainActivity extends Activity
         boolean refresh = preferences.getBoolean(getString(R.string.pref_refresh_on_start),true);
         ((GlobalState) getApplication()).setRefresh(refresh);
 
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         if (password.length()<1)
             return;
         switch (position) {
             case 0:
                 fragmentManager.beginTransaction()
                     .replace(R.id.container, CardListFragment.newInstance())
-                    .commit();
+                    .commitAllowingStateLoss();
                 break;
             case 1:
                 fragmentManager.beginTransaction()
@@ -156,7 +145,9 @@ public class MainActivity extends Activity
         deleteFile(getString(R.string.file_shoppingcart));
         deleteFile(getString(R.string.file_orders));
         PreferenceManager.getDefaultSharedPreferences(this).edit().clear().commit();
-        Log.i(TAG, "User signout, everything cleanup");
+        Timber.i("User signout, everything cleanup");
+        if (null == mTracker)
+            mTracker = ((GlobalState) getApplication()).getTracker();
         mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("User Sign Out").build());
         startActivityForResult(new Intent(this, LoginActivity.class), LoginActivity.REQUEST_CODE);
     }
@@ -176,7 +167,7 @@ public class MainActivity extends Activity
     }
 
     public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);

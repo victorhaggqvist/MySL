@@ -18,7 +18,7 @@ Run at startup: Only used if you set notifications, needed for scheduling notifi
 Case | Available | Tested
 :-------|:-------|:--
 My SL login | yes | yes
-View Accesscards | yes | yes
+View Accesscards | yes | **somewhat**, 0 existing cards are not etested
 View onlile orders | yes | yes
 View purse value | yes | yes
 View purse standard ride | yes | yes
@@ -35,7 +35,7 @@ Rename card | no | **no**
 
 ###Period ticket cases
 Tested | Case | Edges | Tested Ticket
---|:-----|:---------|:--
+:--|:-----|:---------|:--
 yes | Regular period | Start and stop set. Ticket valid. Student ticket. | 30 day (student)
 yes | Inactive | Start and stop NOT set. Ticket valid. Student ticket. | 30 day (student)
 yes | Multiple tickets | Two tickets in array | 30 day (student) + 30 day inactive (student)

@@ -78,27 +78,13 @@
     <string name="login_fail">Inloggingen misslyckades</string>
     <string name="lang_change_app_restart">Starta om appen för full effect</string>
     <string name="terms_title">Villkor</string>
+    <string name="loading">Laddar...</string>
 
-
-    <!-- Do not translate -->
-    <string name="file_shoppingcart">userinfo</string>
-    <string name="file_orders">orders</string>
-    <string name="pref_user_username">user_username</string>
-    <string name="pref_user_password">user_password</string>
-    <string name="pref_user_fullname">user_fullname</string>
-    <string name="pref_user_firstname">user_firstname</string>
-    <string name="pref_user_lastname">user_lastname</string>
-    <string name="pref_user_email">user_email</string>
-    <string name="pref_refresh_on_start">refresh_on_start</string>
-    <string name="pref_lang">lang</string>
-    <string name="pref_lang_en">English</string>
-    <string name="pref_lang_sv">Svenska</string>
-    <string name="pref_alarms">alarms</string>
-    <string name="send_feedback_email_emailaddress">android@snilius.com</string>
-    <string name="about">Copyright 2014 Snilius. \n
-    \nThis application makes use of AB Storstockholms Lokaltrafik unofficial API used on https://sl.se. All communication is done through a SSL/TSL connection.\n
-    \nCard Library by Gabriele Mariotti under Apache License, Version 2.0, https://github.com/gabrielemariotti/cardslib
-    \nIon by Koushik Dutta under Apache License, Version 2.0, https://github.com/koush/ion
-    </string>
-    <string name="pref_user_uid">user_uid</string>
+    <string name="notifications_not_eligible_title">Inga notifieringar</string>
+    <string name="notifications_not_eligible_msg">Du har inga biljetter med notifieringsmöjligheter. Endast periodbiljetter kan ha notifieringar.</string>
+    <string name="login_load_dialog">Loggar in på SL</string>
+    <string name="create_account_creating">Skapar konto</string>
+    <string name="add_card_name">Kortnamn</string>
+    <string name="add_card_number">Kortnummer</string>
+    <string name="add_card_number_repeat">Kortnummer igen</string>
 </resources>

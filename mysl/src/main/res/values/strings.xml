@@ -28,7 +28,7 @@
     <string name="error_login_credentials">Login failed, are you sure about those credentials?</string>
     <string name="error_connectivity">Could not connect to sl.se</string>
     <!--<string name="hello_blank_fragment">Hello blank fragment</string>-->
-    <string name="file_shoppingcart">userinfo</string>
+    <string name="file_shoppingcart" translatable="false">userinfo</string>
     <string name="reduced_price">Reduced Price</string>
     <!-- <string name="list_card_purse" formatted="false">SL Access Credit: %skr, %d Coupons</string> -->
     <string name="list_card_purse_subtitle" formatted="false">%s, %s coupons</string>
@@ -37,7 +37,7 @@
     <string name="card_empty">Card is empty</string>
     <string name="card_detail_purse_value" fomatted="false">Credit: %skr</string>
     <string name="card_detail_purse_default_ride" fomatted="false">Standard Ride: %d coupons</string>
-    <string name="file_orders">orders</string>
+    <string name="file_orders" translatable="false">orders</string>
     <!-- <string name="order_list_productline" fomatted="false"> %sst %s </string> -->
 
     <string name="create_username">Username</string>
@@ -70,43 +70,54 @@
 
     <!-- Preference -->
 
-    <string name="pref_user_username">user_username</string>
-    <string name="pref_user_password">user_password</string>
-    <string name="pref_user_fullname">user_fullname</string>
-    <string name="pref_user_firstname">user_firstname</string>
-    <string name="pref_user_lastname">user_lastname</string>
-    <string name="pref_user_email">user_email</string>
+    <string name="pref_user_username" translatable="false">user_username</string>
+    <string name="pref_user_password" translatable="false">user_password</string>
+    <string name="pref_user_fullname" translatable="false">user_fullname</string>
+    <string name="pref_user_firstname" translatable="false">user_firstname</string>
+    <string name="pref_user_lastname" translatable="false">user_lastname</string>
+    <string name="pref_user_email" translatable="false">user_email</string>
     <string name="pref_header_general">General</string>
     <string name="pref_header_about">About</string>
-    <string name="pref_refresh_on_start">refresh_on_start</string>
+    <string name="pref_refresh_on_start" translatable="false">refresh_on_start</string>
     <string name="pref_title_refresh_on_start">Refresh on start</string>
     <string name="pref_description_refresh_on_start">Refresh info when app starts</string>
     <string name="pref_title_lang">Language</string>
-    <string name="pref_lang">lang</string>
-    <string name="pref_lang_en">English</string>
-    <string name="pref_lang_sv">Svenska</string>
+    <string name="pref_lang" translatable="false">lang</string>
+    <string name="pref_lang_en" translatable="false">English</string>
+    <string name="pref_lang_sv" translatable="false">Svenska</string>
     <string name="rate">Rate App</string>
     <string name="pref_title_about">About</string>
-    <string name="send_feedback_email_emailaddress">android@snilius.com</string>
+    <string name="send_feedback_email_emailaddress" translatable="false">android@snilius.com</string>
     <string name="send_feedback_email_title">My SL</string>
     <string name="title_activity_about">About</string>
-    <!--<string name="hello_world">Hello world!</string>-->
     <string name="send_email">Send Email</string>
     <string name="purse">SL Access Credit</string>
     <string name="list_card_purse_title" formatted="false">SL Access Credit: %skr</string>
     <string name="select_notify_card">Select card</string>
-    <string name="pref_alarms">alarms</string>
+    <string name="pref_alarms" translatable="false">alarms</string>
     <string name="notification_subtitle" formatted="false">Expires %s</string>
     <string name="inactive">(Inactive)</string>
     <string name="account_created">Account Created</string>
-    <string name="about">Copyright 2014 Snilius. \n
-    \nThis application makes use of AB Storstockholms Lokaltrafik unofficial API used on https://sl.se. All communication is done through a SSL/TSL connection.\n
+    <string name="about" translatable="false">Copyright 2014 Snilius. \n
+    \nThis application makes use of AB Storstockholms Lokaltrafik unofficial API used on https://sl.se. All communication is done through a SSL/TLS connection.\n
     \nCard Library by Gabriele Mariotti under Apache License, Version 2.0, https://github.com/gabrielemariotti/cardslib
     \nIon by Koushik Dutta under Apache License, Version 2.0, https://github.com/koush/ion
+    \nGson by Google under Apache License, Version 2.0, https://code.google.com/p/google-gson
+    \nMaterial Design Icons by Google under CC by SA 4.0, https://github.com/google/material-design-icons
+    \nTimber by Jake Wharton under Apache License, Version 2.0, https://github.com/JakeWharton/timber
+    \n\nThis application, My SL, is distributed under the GPLv3 license. View the source and contribute at https://github.com/victorhaggqvist/MySL
     </string>
     <string name="login_fail">Login failed</string>
-    <string name="pref_user_uid">user_uid</string>
+    <string name="pref_user_uid" translatable="false">user_uid</string>
     <string name="lang_change_app_restart">Restart the app for full effect</string>
+    <string name="loading">Loading...</string>
+    <string name="notifications_not_eligible_title">No tickets eligible</string>
+    <string name="notifications_not_eligible_msg">There is no tickets eligible for notifications at the moment. Only period tickets are eligible for notifications.</string>
+    <string name="login_load_dialog">Signing-in to SL</string>
+    <string name="create_account_creating">Creating Account</string>
+    <string name="add_card_number">Card Number</string>
+    <string name="add_card_number_repeat">Card Number Repeat</string>
+    <string name="add_card_name">Card Name</string>
 
     <string name="terms_title">Terms</string>
 

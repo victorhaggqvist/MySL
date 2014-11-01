@@ -1,0 +1,41 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_header_general">
+
+        <CheckBoxPreference
+            android:key="@string/pref_refresh_on_start"
+            android:title="@string/pref_title_refresh_on_start"
+            android:summary="@string/pref_description_refresh_on_start"
+            android:defaultValue="true" />
+
+        <ListPreference
+            android:key="@string/pref_lang"
+            android:title="@string/pref_title_lang"
+            android:dialogTitle="@string/pref_title_lang"
+            android:entries="@array/pref_langs_entries"
+            android:entryValues="@array/pref_langs_values"
+            android:negativeButtonText="@null"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_header_about">
+
+        <Preference
+            android:key="about_legal"
+            android:title="@string/pref_title_about"/>
+
+        <Preference
+            android:key="about_contact"
+            android:title="Email" />
+
+        <Preference
+            android:key="about_rate"
+            android:title="@string/rate" />
+
+        <Preference
+            android:key="about_version"
+            android:title="Version" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

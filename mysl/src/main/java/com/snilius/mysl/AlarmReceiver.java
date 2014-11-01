@@ -1,6 +1,5 @@
 package com.snilius.mysl;
 
-import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,10 +18,8 @@ import android.util.Log;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 

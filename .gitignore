@@ -33,7 +33,7 @@ proguard/
 #crashlytics
 crashlytics.properties
 crashlytics-build.properties
-com_crashlytics_export_strings.xml
+com_crashlytics*
 
 release.properties
 LoginDefinitions.java

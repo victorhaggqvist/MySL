@@ -1,21 +1,12 @@
 package com.snilius.mysl;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
 import com.koushikdutta.ion.cookie.CookieMiddleware;
-
-import org.apache.http.NameValuePair;
-
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by victor on 7/19/14.
@@ -53,6 +44,7 @@ public class SLApiProvider{
                 .noCache()
                 .setHeader("User-Agent", USER_AGENT)
                 .setHeader("Referer", "https://sl.se/sv/mitt-sl/inloggning/")
+                .setHeader("Content-Type", "application/json;charset=UTF-8")
                 .setJsonObjectBody(json)
                 .group(requestGroup)
                 .asJsonObject()
@@ -85,6 +77,7 @@ public class SLApiProvider{
                 .setHeader("Referer", "https://sl.se/sv/mitt-sl/konto/")
                 .setHeader("Accept", "application/json, text/plain, */*")
                 .setHeader("Pragma", "no-cache")
+                .setHeader("Content-Type", "application/json;charset=UTF-8")
                 .setJsonObjectBody(requestBody)
                 .group(requestGroup)
                 .asJsonObject()
@@ -124,6 +117,25 @@ public class SLApiProvider{
     public void  registerTravelCard(Context context, FutureCallback<Response<JsonObject>> callback, JsonObject postBody){
         Ion.with(context)
                 .load(MYSL_ENDPOINT + "/RegisterTravelCard")
+                .setHeader("User-Agent", USER_AGENT)
+                .setHeader("Referer", "https://sl.se/sv/mitt-sl/inloggning//")
+                .setHeader("Accept", "application/json, text/plain, */*")
+                .setHeader("Pragma", "no-cache")
+                .setHeader("Content-Type", "application/json;charset=utf-8")
+                .setJsonObjectBody(postBody)
+                .group(requestGroup)
+                .asJsonObject()
+                .withResponse()
+                .setCallback(callback);
+    }
+
+    public void forgotUsername(Context context, FutureCallback<Response<JsonObject>> callback, String email){
+        JsonObject postBody = new JsonObject();
+        JsonObject sub = new JsonObject();
+        sub.addProperty("email",email);
+        postBody.add("user_account",sub);
+        Ion.with(context)
+                .load(MYSL_ENDPOINT + "/ForgotUsername")
                 .setHeader("User-Agent", USER_AGENT)
                 .setHeader("Referer", "https://sl.se/sv/mitt-sl/inloggning//")
                 .setHeader("Accept", "application/json, text/plain, */*")

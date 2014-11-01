@@ -55,6 +55,10 @@ public class CardProduct {
         return productPrice;
     }
 
+    public String getStartDate() {
+        return startDate;
+    }
+
     public String getStartDateExt() {
         return startDateExt;
     }
