@@ -52,24 +52,38 @@ public class GlobalState extends Application{
                 .getDefaultSharedPreferences(getApplicationContext());
 
         String language = sharedPreferences.getString(getString(R.string.pref_lang), "system");
-        Timber.d("Preferred language: " + language);
+        if (language.equals("system")) {
 
-        Locale locale = null;
-        if ("sv".equals(language)) {
-            locale = new Locale("sv", "SE");
-        } else if ("es".equals(language)) {
-            locale = new Locale("es", "ES");
-        } else if ("en".equals(language)) {
-            locale = Locale.ENGLISH;
-        }
+            Locale aDefault = Locale.getDefault();
+            String defLang = aDefault.getLanguage();
+            Timber.i("Default locale " + defLang);
 
-        if (locale != null) {
-            Timber.d("setting locale " + locale);
-            Resources res = getResources();
-            DisplayMetrics dm = res.getDisplayMetrics();
-            Configuration conf = res.getConfiguration();
-            conf.locale = locale;
-            res.updateConfiguration(conf, dm);
+            if ("sv".equals(defLang) || "en".equals(defLang))
+                sharedPreferences.edit()
+                    .putString(getString(R.string.pref_lang),defLang).apply();
+            else
+                sharedPreferences.edit()
+                        .putString(getString(R.string.pref_lang),"en").apply();
+
+        } else {
+            Timber.i("Preferred language: " + language);
+
+            Locale locale = null;
+
+            if ("sv".equals(language)) {
+                locale = new Locale("sv", "SE");
+            } else if ("en".equals(language)) {
+                locale = Locale.ENGLISH;
+            }
+
+            if (locale != null) {
+                Timber.d("setting locale " + locale);
+                Resources res = getResources();
+                DisplayMetrics dm = res.getDisplayMetrics();
+                Configuration conf = res.getConfiguration();
+                conf.locale = locale;
+                res.updateConfiguration(conf, dm);
+            }
         }
     }
 

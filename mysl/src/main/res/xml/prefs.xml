@@ -14,7 +14,6 @@
             android:dialogTitle="@string/pref_title_lang"
             android:entries="@array/pref_langs_entries"
             android:entryValues="@array/pref_langs_values"
-            android:defaultValue="en"
             android:negativeButtonText="@null"/>
 
     </PreferenceCategory>
