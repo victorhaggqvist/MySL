@@ -115,5 +115,8 @@
     <string name="notifications_not_eligible_msg">There is no tickets eligible for notifications at the moment. Only period tickets are eligible for notifications.</string>
     <string name="login_load_dialog">Signing-in to SL</string>
     <string name="create_account_creating">Creating Account</string>
+    <string name="add_card_number">Card Number</string>
+    <string name="add_card_number_repeat">Card Number Repeat</string>
+    <string name="add_card_name">Card Name</string>
 
 </resources>

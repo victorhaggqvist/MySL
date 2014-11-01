@@ -83,4 +83,7 @@
     <string name="notifications_not_eligible_msg">Du har inga biljetter med notifieringsmöjligheter. Endast periodbiljetter kan ha notifieringar.</string>
     <string name="login_load_dialog">Loggar in på SL</string>
     <string name="create_account_creating">Skapar konto</string>
+    <string name="add_card_name">Kortnamn</string>
+    <string name="add_card_number">Kortnummer</string>
+    <string name="add_card_number_repeat">Kortnummer igen</string>
 </resources>

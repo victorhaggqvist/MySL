@@ -23,7 +23,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:text="Card Number"
+            android:text="@string/add_card_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -37,7 +37,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Card Number Repeat"/>
+            android:text="@string/add_card_number_repeat"/>
 
         <EditText
             android:layout_width="match_parent"
@@ -48,7 +48,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Card Name"/>
+            android:text="@string/add_card_name"/>
 
         <EditText
             android:layout_width="match_parent"
