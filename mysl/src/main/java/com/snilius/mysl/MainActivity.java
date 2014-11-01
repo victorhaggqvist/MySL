@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,12 +17,10 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.snilius.mysl.util.HashHelper;
 import com.snilius.mysl.util.Helper;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
@@ -55,7 +52,7 @@ public class MainActivity extends ActionBarActivity
 
         setContentView(R.layout.activity_main);
 
-        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+        PreferenceManager.setDefaultValues(this, R.xml.prefs, false);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.navigation_drawer);
@@ -83,16 +80,8 @@ public class MainActivity extends ActionBarActivity
             mNavigationDrawerFragment.setUserIfno(fullName, email);
 
             if (uid.length()<1){
-                try {
-                    MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                    byte[] hash = digest.digest(email.getBytes("UTF-8"));
-                    uid = hash.toString();
-                    preferences.edit().putString(getString(R.string.pref_user_uid), uid).commit();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                uid = HashHelper.sha256(email);
+                preferences.edit().putString(getString(R.string.pref_user_uid), uid).apply();
             }
 
             mTracker.set("&uid", uid);
@@ -116,8 +105,7 @@ public class MainActivity extends ActionBarActivity
                 JsonObject userInfo = new JsonParser().parse(userinfoFile).getAsJsonObject();
                 ((GlobalState) getApplication()).setmShoppingCart(userInfo);
             } catch (JsonSyntaxException e) {
-                System.out.println("User info file has broken json");
-//            e.printStackTrace();
+                Timber.i(e, "User info file has broken json");
             }
         }
     }

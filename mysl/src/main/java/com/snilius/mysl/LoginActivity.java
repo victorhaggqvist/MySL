@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,17 +19,16 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Response;
+import com.snilius.mysl.util.HashHelper;
 import com.snilius.mysl.util.LoginDefinitions;
 import com.snilius.mysl.util.TextValidator;
 
 import java.io.FileOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
+import timber.log.Timber;
 
 public class LoginActivity extends ActionBarActivity implements View.OnClickListener {
 
-    public static final String TAG = "LoginActivity";
     public static final int REQUEST_CODE = 1;
 
     private Button login, create;
@@ -93,7 +91,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
 
         mTracker = ((GlobalState) getApplication()).getTracker();
         mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage(getString(R.string.login_load_dialog));;
+        mProgressDialog.setMessage(getString(R.string.login_load_dialog));
         mProgressDialog.setIndeterminate(true);
     }
 
@@ -134,7 +132,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         @Override
         public void onCompleted(Exception e, Response<JsonObject> result) {
             if (e != null) {
-                Log.i(TAG, e.toString());
+                Timber.i(result.getHeaders().getStatusLine());
                 Toast.makeText(getApplication(), getString(R.string.login_fail), Toast.LENGTH_LONG).show();
                 login_error.setText(getString(R.string.error_connectivity));
                 login_error.setVisibility(View.VISIBLE);
@@ -160,7 +158,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                 return;
             }
 
-            Log.i(TAG, "Auth successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+            Timber.i("Auth successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
             sl.getShoppingCart(getApplication(), new GetShoopingCartCallback());
         }
     }
@@ -173,7 +171,7 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
             JsonObject response = result.getResult();
 //            System.out.println("data: " + response.getAsJsonObject("data"));
             boolean doesSLThinkImAutenticated = response.getAsJsonObject("data").get("UserAutenticated").getAsBoolean();
-            Log.i(TAG, "SL like us: " + doesSLThinkImAutenticated);
+            Timber.i("SL like us: " + doesSLThinkImAutenticated);
 
             if (doesSLThinkImAutenticated){
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getApplication()).edit();
@@ -183,21 +181,15 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
                 editor.putString(getString(R.string.pref_user_fullname), userSession.get("FullName").getAsString());
                 editor.putString(getString(R.string.pref_user_firstname), userSession.get("FirstName").getAsString());
                 editor.putString(getString(R.string.pref_user_lastname), userSession.get("LastName").getAsString());
-                editor.putString(getString(R.string.pref_user_email), userSession.get("Email").getAsString());
+                String email = userSession.get("Email").getAsString();
+                editor.putString(getString(R.string.pref_user_email), email);
                 editor.putString(getString(R.string.pref_user_username), username.getText().toString());
                 editor.putString(getString(R.string.pref_user_password), password.getText().toString());
                 editor.apply();
 
-                try {
-                    MessageDigest digest = MessageDigest.getInstance("SHA-256");
-                    byte[] hash = digest.digest(userSession.get("Email").getAsString().getBytes("UTF-8"));
-                    editor.putString(getString(R.string.pref_user_uid), hash.toString()).apply();
-                    mTracker.set("&uid", hash.toString());
-                } catch (NoSuchAlgorithmException e1) {
-                    e1.printStackTrace();
-                } catch (UnsupportedEncodingException e1) {
-                    e1.printStackTrace();
-                }
+                String hash = HashHelper.sha256(email);
+                editor.putString(getString(R.string.pref_user_uid), hash).apply();
+                mTracker.set("&uid", hash);
 
                 mTracker.send(new HitBuilders.EventBuilder().setCategory("UX").setAction("User Sign In").build());
 
