@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
+import timber.log.Timber;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,14 +41,6 @@ import java.util.concurrent.TimeoutException;
  *
  */
 public class OnlineOrdersFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    private static final String TAG = "OnlineOrdersFragment";
-
-//    private static final String ARG_USERNAME = "CardList.Username";
-//    private static final String ARG_PASSWORD = "CardList.Password";
-
-    // TODO: Rename and change types of parameters
-//    private String mParam1;
-//    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
     private String mUsername, mPassword;
@@ -132,7 +125,7 @@ public class OnlineOrdersFragment extends Fragment implements SwipeRefreshLayout
                 orderData = new JsonParser().parse(ordersFile).getAsJsonObject();
                 completeSetup();
             } catch (IOException e) {
-                Log.i(TAG, "No orders file present");
+                Timber.i("No orders file present");
                 doRefresh();
             }
         }else {
@@ -183,7 +176,7 @@ public class OnlineOrdersFragment extends Fragment implements SwipeRefreshLayout
         listAdapter = new OrderListAdapter(getActivity(), headers, children);
         listView.setAdapter(listAdapter);
 
-        Log.i(TAG, "List loaded");
+        Timber.i("List loaded");
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
@@ -247,20 +240,20 @@ public class OnlineOrdersFragment extends Fragment implements SwipeRefreshLayout
         public void onCompleted(Exception e, Response<JsonObject> result) {
             if (null == result) {
                 if (e instanceof TimeoutException) {
-                    Log.i(TAG, "Login, Connection Timeout");
+                    Timber.i("Login, Connection Timeout");
                     mSwipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(getActivity(), getString(R.string.error_connectivity), Toast.LENGTH_LONG).show();
                 }else
-                    Log.i(TAG, "Login Canceled");
+                    Timber.i("Login Canceled");
             }else if (result.getHeaders().getResponseCode() == 200){
-                Log.d(TAG, "Login successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                Timber.d("Login successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
                 mAuthenticated = true;
                 if (null != getActivity())
                     sl.getSalesOrders(getActivity(), new SalesOrdersCallback());
             }else {
 //                System.out.println(result.getResult());
 //                Toast.makeText(getActivity(), "failed to refresh", Toast.LENGTH_LONG).show();
-                Log.d(TAG, "Login failed: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                Timber.d("Login failed: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
             }
         }
     }
@@ -269,19 +262,19 @@ public class OnlineOrdersFragment extends Fragment implements SwipeRefreshLayout
         @Override
         public void onCompleted(Exception e, Response<JsonObject> result) {
             if (null == result)
-                Log.i(TAG, "SalesOrders Canceled");
+                Timber.i("SalesOrders Canceled");
             else if (result.getHeaders().getResponseCode() == 200){
-                Log.d(TAG, "Sales load successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                Timber.d("Sales load successfull: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
                 orderData = result.getResult().getAsJsonObject("data");
                 try {
                     Helper.saveToFile(getActivity(), getString(R.string.file_orders), orderData.toString());
                 } catch (IOException e1) {
-                    Log.e(TAG, "Failed to store orders");
+                    Timber.e("Failed to store orders");
                     e1.printStackTrace();
                 }
                 completeSetup();
             }else{
-                Log.d(TAG, "Sales load failed: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
+                Timber.d("Sales load failed: " + result.getHeaders().getResponseCode() + result.getHeaders().getResponseMessage());
             }
         }
     }
